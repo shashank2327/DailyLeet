@@ -1,42 +1,37 @@
 class Solution {
     public List<String> wordSubsets(String[] words1, String[] words2) {
-        
-        Map<Character, Integer> count2 = new HashMap<>();
+        int[] maxFreq = new int[26];
 
-        for (String w : words2) {
-            Map<Character, Integer> countW = getCountMap(w);
-            for (Map.Entry<Character, Integer> entry : countW.entrySet()) {
-                char c = entry.getKey();
-                int cnt = entry.getValue();
-                count2.put(c, Math.max(count2.getOrDefault(c, 0), cnt));
+        for (String b : words2) {
+            int[] freq = countFrequency(b);
+            for (int i = 0; i < 26; i++) {
+                maxFreq[i] = Math.max(maxFreq[i], freq[i]);
             }
         }
 
-        List<String> res = new ArrayList<>();
-        for (String w : words1) {
-            Map<Character, Integer> countW = getCountMap(w);
+        List<String> result = new ArrayList<>();
+        for (String a : words1) {
+            int[] freq = countFrequency(a);
             boolean isUniversal = true;
-            for (Map.Entry<Character, Integer> entry : count2.entrySet()) {
-                char c = entry.getKey();
-                int cnt = entry.getValue();
-                if (countW.getOrDefault(c, 0) < cnt) {
+            for (int i = 0; i < 26; i++) {
+                if (freq[i] < maxFreq[i]) {
                     isUniversal = false;
                     break;
                 }
             }
             if (isUniversal) {
-                res.add(w);
+                result.add(a);
             }
         }
 
-        return res;
+        return result;
     }
 
-    private Map<Character, Integer> getCountMap(String word) {
-        Map<Character, Integer> countMap = new HashMap<>();
+    private static int[] countFrequency(String word) {
+        int[] freq = new int[26];
         for (char c : word.toCharArray()) {
-            countMap.put(c, countMap.getOrDefault(c, 0) + 1);
+            freq[c - 'a']++;
         }
-        return countMap;
+        return freq;
     }
 }
