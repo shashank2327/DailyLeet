@@ -19,10 +19,9 @@ class Solution {
             rows[rc[0]]++;
             cols[rc[1]]++;
             if (rows[rc[0]] == n || cols[rc[1]] == m) {
-                ind = i;
-                break;
+                return i;
             }
         }
-        return ind;
+        return len - 1;
     }
 }
