@@ -7,11 +7,16 @@ class Solution {
         while (low <= high) {
             long mid = low + (high - low) / 2;
             long tripsCovered = 0;
+            boolean flag = true;
             for (int i = 0; i < n; i++) {
                 tripsCovered += mid / time[i];
+                if (tripsCovered >= totalTrips) {
+                    flag = false;
+                    break;
+                }
             }
 
-            if (tripsCovered < totalTrips) {
+            if (flag) {
                 low = mid + 1;
             } else {
                 high = mid - 1;
