@@ -1,39 +1,45 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        int n = nums.length;
-        int max = 0;
-
-        for (int num : nums) {
-            max += num;
-        }
-
-        if (target > max || target < -max) return 0;
-
-        int[][] dp = new int[n][(2*max) + 1];
-
-        for (int[] a : dp) {
-            Arrays.fill(a, Integer.MIN_VALUE);
-        }
-
-        return totalWays(max, nums, 0, target, 0, dp);
+        return countPartitions(nums, target);
     }
 
-    public int totalWays(int max, int[] nums, int ind, int target, int currentVal, int[][] dp) {
 
-        if (ind == nums.length) {
-            if (currentVal == target) {
-                return 1;
-            } else {
-                return 0;
-            }
+    int countPartitions(int[] a, int d) {
+        int n = a.length;
+        int totSum = 0;
+        for(int i=0 ; i<n;i++){
+            totSum += a[i];
         }
 
-        if (dp[ind][currentVal + max] != Integer.MIN_VALUE) return dp[ind][currentVal + max];
-
-
-        dp[ind][currentVal + max] = totalWays(max, nums, ind + 1, target, currentVal + nums[ind], dp) + 
-                totalWays(max , nums, ind + 1, target, currentVal - nums[ind], dp);
-
-        return dp[ind][currentVal + max];
+        if(totSum-d <0 || (totSum-d)%2==1 ) return 0;
+    
+        return findWays(a,(totSum-d)/2);
+        
+    }
+    
+    
+    static int findWays(int[] num, int tar){
+        int n = num.length;
+        Arrays.sort(num);
+        int dp[][] = new int[n][tar+1];
+    
+        if(num[0] == 0) dp[0][0] =2;  // 2 cases -pick and not pick
+        else dp[0][0] = 1;  // 1 case - not pick
+    
+        if(num[0]!=0 && num[0]<=tar) dp[0][num[0]] = 1;  // 1 case -pick
+    
+        for(int ind = 1; ind<n; ind++){
+            for(int target= 0; target<=tar; target++){
+            
+                int notTaken = dp[ind-1][target];
+    
+                int taken = 0;
+                if(num[ind]<=target) {
+                    taken = dp[ind-1][target-num[ind]];   
+                }
+                dp[ind][target]= (notTaken + taken);
+            }
+        }
+        return dp[n-1][tar];
     }
 }
