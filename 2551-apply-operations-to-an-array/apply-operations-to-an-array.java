@@ -10,13 +10,9 @@ class Solution {
         }
 
         int l = 0;
-        int r = n - 1;
 
         for (int num : nums) {
-            if (num == 0) {
-                result[r] = 0;
-                r--;
-            } else {
+            if (num != 0) {
                 result[l] = num;
                 l++;
             }
