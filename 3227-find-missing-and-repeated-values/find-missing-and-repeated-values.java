@@ -1,15 +1,24 @@
 class Solution {
     public int[] findMissingAndRepeatedValues(int[][] grid) {
         int n= grid.length;
-        int[] a = new int[n * n];
-        int idx = 0;
+        int[] a = new int[(n * n) + 1];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                a[idx] = grid[i][j];
-                idx++;
+                a[grid[i][j]]++;
             }
         }
-        return solve(a);
+        int a1 = -1;
+        int b = -1;
+        for (int i = 1; i < a.length; i++) {
+            if (a[i] == 2) {
+                a1 = i;
+            }
+            if (a[i] == 0) {
+                b = i;
+            }
+        }
+
+        return new int[]{a1, b};
     }
 
 
