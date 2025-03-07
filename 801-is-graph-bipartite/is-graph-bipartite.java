@@ -6,7 +6,7 @@ class Solution {
 
         for (int i = 0; i < V; i++) {
             if (color[i] == -1) {
-                if (checkBFS(i, V, graph, color) == false) {
+                if (dfs(i, 0, color, graph) == false) {
                     return false;
                 }
             }
@@ -15,25 +15,17 @@ class Solution {
     }
 
 
-    private boolean checkBFS(int start, int V, int[][] graph, int[] color) {
-
-        Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        color[start] = 0;
-        while (!q.isEmpty()) {
-            int node = q.peek();
-            q.remove();
-
-            for (int i = 0; i < graph[node].length; i++) {
-                if (color[graph[node][i]] == -1) {
-                    color[graph[node][i]] = color[node] ^ 1;
-                    q.add(graph[node][i]);
-                } else if (color[graph[node][i]] == color[node]) {
+    private boolean dfs(int node, int col, int[] color, int[][] graph) {
+        color[node] = col;
+        for (int i = 0; i < graph[node].length; i++) {
+            if (color[graph[node][i]] == -1) {
+                if (dfs(graph[node][i], 1- col, color, graph) == false) {
                     return false;
                 }
+            }  else if (color[graph[node][i]] == col) {
+                    return false;
             }
         }
-
         return true;
     }
 }
