@@ -8,11 +8,11 @@ class Solution {
 
         while (r < n) {
             while ((bitmask & nums[r]) != 0) {
-                bitmask ^= nums[l];
+                bitmask ^= nums[l]; // remove the bits of nums[l] from bitmask;
                 l++;
             }
 
-            bitmask = bitmask | nums[r];
+            bitmask = bitmask | nums[r]; // adds the bits of nums[r] to bitmask;
             max = Math.max(max, r - l + 1);
             r++;
         }
