@@ -13,19 +13,8 @@ class Solution {
             i++;
         }
 
-        boolean flag = false;
+        if (a[n - 1] == 0 || a[n - 2] == 0) return -1;
 
-        for (int num : a) {
-            if (num == 0) {
-                flag = true;
-                break;
-            }
-        }
-
-        if (flag) {
-            return -1;
-        } else {
-            return cnt;
-        }
+        return cnt;
     }
 }
