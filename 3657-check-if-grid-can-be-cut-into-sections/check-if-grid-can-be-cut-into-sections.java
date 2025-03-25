@@ -35,6 +35,6 @@ class Solution {
 
         cnt++;
 
-        return cnt > 2 ? true : false;
+        return cnt > 2;
     }
 }
