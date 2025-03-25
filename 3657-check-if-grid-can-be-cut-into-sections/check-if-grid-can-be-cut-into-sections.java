@@ -22,21 +22,19 @@ class Solution {
 
         Arrays.sort(mat, Comparator.comparingInt(a -> a[0]));
         int n = mat.length;
-        ArrayList<int[]> merged = new ArrayList<>();
-        int[] prev = mat[0];
+        int prev = mat[0][1];
+        int cnt = 0;
 
         for (int i = 1; i < n; i++) {
             int[] interval = mat[i];
-            if (interval[0] < prev[1]) {
-                prev[1] = Math.max(prev[1], interval[1]);
-            } else {
-                merged.add(prev);
-                prev = interval;
+            if (interval[0] >= prev) {
+                cnt++;
             }
+            prev = Math.max(prev, interval[1]);
         }
 
-        merged.add(prev);
+        cnt++;
 
-        return merged.size() > 2 ? true : false;
+        return cnt > 2 ? true : false;
     }
 }
