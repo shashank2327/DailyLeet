@@ -1,27 +1,20 @@
 class Solution {
     public long mostPoints(int[][] questions) {
         int n = questions.length;
+        long[] dp = new long[n];
+        dp[n - 1] = questions[n - 1][0];
 
-        int MAX_N = (int)2e5 + 1;
-        long[] memo = new long[MAX_N];
-        Arrays.fill(memo, -1);
+        for (int i = n - 2; i >= 0; i--) {
+            dp[i] = questions[i][0];
+            int skip = questions[i][1];
+            if (i + skip + 1 < n) {
+                dp[i] += dp[i + skip + 1];
+            }
 
-        return solve(questions, 0, n, memo);
-    }
-
-    // every time I have two options either to select or not to select.
-    // Lets Memoise this.
-
-    public long solve(int[][] a, int i, int n, long[] memo) {
-        if (i >= n) {
-            return 0;
+            // dp[i] = max(solve it, skip it)
+            dp[i] = Math.max(dp[i], dp[i + 1]);
         }
-        if (memo[i] != -1) return memo[i];
 
-        long case1 = a[i][0] + solve(a, i + a[i][1] + 1, n, memo);
-        long case2 = solve(a, i + 1, n, memo);
-
-        memo[i] = Math.max(case1, case2);
-        return memo[i];
+        return dp[0];
     }
 }
