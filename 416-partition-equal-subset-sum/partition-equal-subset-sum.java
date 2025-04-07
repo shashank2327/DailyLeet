@@ -10,10 +10,24 @@ class Solution {
 
     }
 
+
+    // Space Optimisation 1D
+
     private boolean subsetSum(int[] a, int target) {
         int n = a.length;
-        
-        // 2D - Array
+        boolean[] dp = new boolean[target + 1];
+        dp[0] = true; // a suset with sum 0 is always true;
+
+        for (int num : a) {
+            for (int j = target; j >= num; j--) {
+                // to achieve sum j we either dont include the curr num or include the current if (it target was achieveable with the current num dp[j - num] was true)
+                dp[j] = dp[j] || dp[j - num];
+            }
+        }
+        return dp[target];
+    }
+
+    // 2D - Array
 
         // boolean[][] dp = new boolean[n][target + 1];
         // for (int i = 0; i < n; i++) {
@@ -36,20 +50,4 @@ class Solution {
         // }
 
         // return dp[n - 1][target];
-
-
-
-        // Space Optimisation 1D
-
-        boolean[] dp = new boolean[target + 1];
-        dp[0] = true; // a suset with sum 0 is always true;
-
-        for (int num : a) {
-            for (int j = target; j >= num; j--) {
-                // to achieve sum j we either dont include the curr num or include the current if (it target was achieveable with the current num dp[j - num] was true)
-                dp[j] = dp[j] || dp[j - num];
-            }
-        }
-        return dp[target];
-    }
 }
