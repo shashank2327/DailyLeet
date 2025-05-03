@@ -22,7 +22,7 @@ class Solution {
         for (int i = 0; i < V; i++) {
             if (!vis[i]) {
                 cnt++;
-                dfs(i, adj, vis);
+                bfs(i, adj, vis);
             }
         }
 
