@@ -3,12 +3,12 @@ class Solution {
         int sum1 = 0;
         int sum2 = 0;
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == 'L') {
+        for (char c : s.toCharArray()) {
+            if (c == 'L') {
                 sum1--;
-            } else if (s.charAt(i) == 'R') {
+            } else if (c == 'R') {
                 sum1++;
-            } else if (s.charAt(i) == 'D') {
+            } else if (c == 'D') {
                 sum2--;
             } else {
                 sum2++;
