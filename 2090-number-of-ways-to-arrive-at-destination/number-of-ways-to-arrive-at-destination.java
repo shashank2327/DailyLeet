@@ -26,7 +26,7 @@ class Solution {
             int node = (int) curr[1];
             long currTime = curr[0];
 
-            if (time[node] < currTime) continue;
+            // if (time[node] < currTime) continue;
 
             for (int[] x : adj.get(node)) {
                 long nextTime = (currTime + x[0]);
