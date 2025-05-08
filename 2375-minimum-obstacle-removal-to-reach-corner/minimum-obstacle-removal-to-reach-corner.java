@@ -31,7 +31,8 @@ class Solution {
             int c = it.col; // current Col
 
             if (rmd > removal[r][c]) continue;
-
+            if (r == n - 1 && c == m - 1) return removal[r][c];
+            
             int[] dx = {1, 0, -1, 0};
             int[] dy = {0, 1, 0, -1};
 
