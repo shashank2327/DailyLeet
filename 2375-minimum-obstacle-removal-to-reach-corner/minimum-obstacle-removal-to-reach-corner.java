@@ -21,18 +21,18 @@ class Solution {
         }
         removal[0][0] = 0;
 
-        PriorityQueue<Tuple> q = new PriorityQueue<>((x, y) -> x.removed - y.removed);
-        q.add(new Tuple(0, 0, 0));
+        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+        q.add(new int[]{0, 0, 0});
 
         while (!q.isEmpty()) {
-            Tuple it = q.poll();
-            int rmd = it.removed;
-            int r = it.row; // current Row
-            int c = it.col; // current Col
+            int[] it = q.poll();
+            int rmd = it[0];
+            int r = it[1]; // current Row
+            int c = it[2]; // current Col
 
             if (rmd > removal[r][c]) continue;
             if (r == n - 1 && c == m - 1) return removal[r][c];
-            
+
             int[] dx = {1, 0, -1, 0};
             int[] dy = {0, 1, 0, -1};
 
@@ -43,7 +43,7 @@ class Solution {
                 if (nr < n && nr >= 0 && nc >= 0 && nc < m) {
                     if (rmd + grid[nr][nc] < removal[nr][nc]) {
                         removal[nr][nc] = rmd + grid[nr][nc];
-                        q.add(new Tuple(removal[nr][nc], nr, nc));
+                        q.add(new int[]{removal[nr][nc], nr, nc});
                     }
                 }
             }
