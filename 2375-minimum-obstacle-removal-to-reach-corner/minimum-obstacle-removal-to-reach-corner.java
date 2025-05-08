@@ -20,6 +20,9 @@ class Solution {
             int r = curr[1];
             int c = curr[2];
 
+
+            if (r == n - 1 && c == m - 1) return minObs[r][c];
+            
             for (int i = 0; i < 4; i++) {
                 int nr = r + dx[i];
                 int nc = c + dy[i];
