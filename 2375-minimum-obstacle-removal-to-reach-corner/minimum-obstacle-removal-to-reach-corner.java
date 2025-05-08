@@ -1,54 +1,41 @@
-class Tuple {
-    int removed;
-    int row;
-    int col;
-
-    public Tuple (int removed, int row, int col) {
-        this.removed = removed;
-        this.row = row;
-        this.col = col;
-    }
-}
-
 class Solution {
     public int minimumObstacles(int[][] grid) {
         int n = grid.length;
-        int m =  grid[0].length;
+        int m = grid[0].length;
 
-        int[][] removal = new int[n][m]; // Keep track of minimum removals at each point;
-        for (int[] x : removal) {
-            Arrays.fill (x, (int)1e9);
+        int[][] minObs = new int[n][m];
+        for (int[] x : minObs) {
+            Arrays.fill(x, (int)1e9);
         }
-        removal[0][0] = 0;
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        minObs[0][0] = 0;
 
-        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
-        q.add(new int[]{0, 0, 0});
+        Deque<int[]> deq = new ArrayDeque<>();
+        deq.add(new int[]{0, 0, 0});
 
-        while (!q.isEmpty()) {
-            int[] it = q.poll();
-            int rmd = it[0];
-            int r = it[1]; // current Row
-            int c = it[2]; // current Col
-
-            if (rmd > removal[r][c]) continue;
-            if (r == n - 1 && c == m - 1) return removal[r][c];
-
-            int[] dx = {1, 0, -1, 0};
-            int[] dy = {0, 1, 0, -1};
+        while (!deq.isEmpty()) {
+            int[] curr = deq.poll();
+            int o = curr[0];
+            int r = curr[1];
+            int c = curr[2];
 
             for (int i = 0; i < 4; i++) {
-                int nr = r + dx[i];  // new Row
-                int nc = c + dy[i];  // new Column
+                int nr = r + dx[i];
+                int nc = c + dy[i];
 
-                if (nr < n && nr >= 0 && nc >= 0 && nc < m) {
-                    if (rmd + grid[nr][nc] < removal[nr][nc]) {
-                        removal[nr][nc] = rmd + grid[nr][nc];
-                        q.add(new int[]{removal[nr][nc], nr, nc});
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && minObs[nr][nc] == (int)1e9) {
+                    if (grid[nr][nc] == 1) {
+                        minObs[nr][nc] = o + 1;
+                        deq.addLast(new int[] {o + 1, nr, nc});
+                    } else {
+                        minObs[nr][nc] = o;
+                        deq.addFirst(new int[]{o, nr, nc});
                     }
                 }
             }
         }
 
-        return removal[n - 1][m - 1];
+        return minObs[n - 1][m - 1];
     }
 }
