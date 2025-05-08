@@ -21,7 +21,7 @@ class Solution {
         }
         removal[0][0] = 0;
 
-        Queue<Tuple> q = new LinkedList<>();
+        PriorityQueue<Tuple> q = new PriorityQueue<>((x, y) -> x.removed - y.removed);
         q.add(new Tuple(0, 0, 0));
 
         while (!q.isEmpty()) {
@@ -31,7 +31,7 @@ class Solution {
             int c = it.col; // current Col
 
             if (rmd > removal[r][c]) continue;
-            
+
             int[] dx = {1, 0, -1, 0};
             int[] dy = {0, 1, 0, -1};
 
