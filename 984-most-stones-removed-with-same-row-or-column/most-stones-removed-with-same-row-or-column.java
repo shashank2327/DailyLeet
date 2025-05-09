@@ -95,13 +95,10 @@ class Solution {
         Set<Integer> set = new HashSet<>();
         int ans = 0;
         for (int i = 0; i < n; i++) {
-            ds.parent.set(i, ds.findUPar(i));
-        }
-        for (int i = 0; i < n; i++) {
-            if (!set.contains(ds.parent.get(i))){
-                set.add(ds.parent.get(i));
-            } else {
+            if (set.contains(ds.findUPar(i))) {
                 ans++;
+            } else {
+                set.add(ds.findUPar(i));
             }
         }
 
