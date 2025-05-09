@@ -20,7 +20,7 @@ class Solution {
         }
         tm[0][0] = grid[0][0];
 
-        Queue<Tuple> q = new LinkedList<>();
+        PriorityQueue<Tuple> q = new PriorityQueue<>((x, y) -> x.time - y.time);
         q.add(new Tuple(grid[0][0], 0, 0));
 
         while (!q.isEmpty()) {
@@ -30,6 +30,8 @@ class Solution {
             int c = it.col;
 
             if (t > tm[r][c]) continue;
+
+            if (r == n - 1 && c == n - 1) return tm[r][c];
 
             int[] dx = {0, 0, 1, -1};
             int[] dy = {1, -1, 0, 0};
