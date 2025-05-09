@@ -26,7 +26,7 @@ class Solution {
             adj.get(u).add(new Pair(v, 1));
         }
 
-        boolean[][][] vis = new boolean[n][n][2];  // u, v, color
+        // boolean[][][] vis = new boolean[n][n][2];  // u, v, color
         int[][] dis = new int[n][2];
         for (int[] x : dis) {
             Arrays.fill (x, (int) 1e9);
@@ -47,8 +47,8 @@ class Solution {
                 int adjNode = token.first;
                 int col = token.second;
 
-                if (col != color && dis[node][color] + 1 < dis[adjNode][col] && !vis[node][adjNode][col]) {
-                    vis[node][adjNode][col] = true;
+                if (col != color && dis[node][color] + 1 < dis[adjNode][col] ) {
+                    
                     dis[adjNode][col] = dis[node][color] + 1;
                     q.add(new Pair(adjNode, col));
                 }
