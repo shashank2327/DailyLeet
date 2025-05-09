@@ -7,7 +7,7 @@ public class DisjointSet {
 
     // Constructor (Taking number of nodes);
     public DisjointSet(int n) {
-        for (int i = 0; i <+ n; i++) {
+        for (int i = 0; i <= n; i++) {
             rank.add(0);
             parent.add(i);
             size.add(1);
@@ -71,7 +71,7 @@ class Solution {
         for (int i = 0; i < m; i++) {
             int u = connections[i][0];
             int v = connections[i][1];
-            if (ds.findUPar(u) == ds.findUPar(v)) {
+            if (ds.findUPar(u) == ds.findUPar(v)) { 
                 extra++;
             } else {
                 ds.unionBySize(u, v);
@@ -83,7 +83,7 @@ class Solution {
             if (ds.parent.get(i) == i) cntC++;
         }
 
-        int ans = cntC - 1;
+        int ans = cntC - 1;  // reason for subtracting 1 ->> There will be one ultimate Parent.
 
         if (extra >= ans) return ans;
         return -1;
