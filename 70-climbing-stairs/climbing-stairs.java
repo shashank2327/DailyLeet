@@ -1,8 +1,9 @@
 class Solution {
     public int climbStairs(int n) {
-        int[] memo = new int[n + 1];
-        Arrays.fill(memo, -1);
-        return memoFunction(n, memo);
+        // int[] memo = new int[n + 1];
+        // Arrays.fill(memo, -1);
+        // return memoFunction(n, memo);
+        return dp(n);
     }
 
     // Every time I have two options
@@ -25,5 +26,16 @@ class Solution {
         int ways = memoFunction(n - 1, memo) + memoFunction(n - 2, memo);
         memo[n] = ways;
         return memo[n];
+    }
+
+    private int dp(int n) {
+        int a = 0;
+        int b = 1;
+        for (int i = 1; i <= n; i++) {
+            int c = a + b;
+            a = b;
+            b = c;
+        }
+        return b;
     }
 }
