@@ -21,6 +21,8 @@ class Solution {
             return true;
         }
         if (j < 0) return false;
+
+
         if (memo[i][j] != -1) {
             return memo[i][j] == 0 ? false : true;
         }
@@ -31,7 +33,7 @@ class Solution {
         }
         if (s.charAt(i) != t.charAt(j) && t.charAt(j) != '*') return false;
 
-        memo[i][j] = (f(s, t, i - 1, j, memo) || f(s, t, i - 1, j - 1, memo) || f(s, t, i, j - 1, memo)) == true ? 1 : 0;
+        memo[i][j] = (f(s, t, i - 1, j, memo) || f(s, t, i, j - 1, memo)) == true ? 1 : 0;
         return memo[i][j] == 1 ? true : false;
     }
 }
