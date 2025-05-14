@@ -3,9 +3,13 @@ class Solution {
         int n = s.length();
         int m = t.length();
 
+/*---------------------------------------------------------------------------------------*/
         int[][] memo = new int[n][m];
         for (int[] x : memo) Arrays.fill(x, -1);
         // return f(s, p, n - 1, m - 1, memo);
+
+
+/*--------------------------tabulation---------------------------------------------------*/
 
         boolean[][] dp = new boolean[n + 1][m + 1];
         dp[0][0] = true;
@@ -30,11 +34,11 @@ class Solution {
                 }
             }
         }
-
         return dp[n][m];
     }
 
 
+/*----------------------recursive + memoisation--------------------------------------------------*/
 
     private boolean f(String s, String t, int i, int j, int[][] memo) {
         if (i < 0) {
