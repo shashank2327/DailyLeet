@@ -5,7 +5,8 @@ class Solution {
         for (int[] x : memo) {
             Arrays.fill(x, Integer.MIN_VALUE);
         }
-        return f(prices, 0, 1, memo, fee);
+        // return f(prices, 0, 1, memo, fee);
+        return stockProfit(prices, fee);
     }
 
     private int f(int[] prices, int i, int bs, int[][] memo , int fee) {
@@ -25,5 +26,31 @@ class Solution {
                 f(prices, i + 1, 0, memo, fee)
             );
         }
+    }
+
+
+    private int stockProfit(int[] Arr, int fee) {
+        int n = Arr.length;
+        int dp[][] = new int[n + 1][2];
+        
+        // Iterate through the array backwards
+        for (int ind = n - 1; ind >= 0; ind--) {
+            for (int buy = 0; buy <= 1; buy++) {
+                int profit = 0;
+
+                if (buy == 0) { // We can buy the stock
+                    profit = Math.max(0 + dp[ind + 1][0], -Arr[ind] + dp[ind + 1][1]);
+                }
+
+                if (buy == 1) { // We can sell the stock
+                    profit = Math.max(0 + dp[ind + 1][1], Arr[ind] + dp[ind + 1][0] - fee);
+                }
+
+                dp[ind][buy] = profit;
+            }
+        }
+
+        // The maximum profit is stored in dp[0][0]
+        return dp[0][0];
     }
 }
