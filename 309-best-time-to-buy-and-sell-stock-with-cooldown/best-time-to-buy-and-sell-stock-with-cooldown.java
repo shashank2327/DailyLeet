@@ -9,11 +9,15 @@ class Solution {
 
     }
 
+
+    // bs (buy or sell) == 1 --> i can buy;
+    // bs (buy or sell) == 0 --> i can sell;
     private int f(int[] prices, int i, int bs, int[][] memo) {
         if (i >= prices.length) {
             return 0;
         }
         if (memo[i][bs] != Integer.MIN_VALUE) return memo[i][bs];
+
         if (bs == 1) {
             return memo[i][bs] =  Math.max(
                 -prices[i] + f(prices, i + 1, 0, memo),
