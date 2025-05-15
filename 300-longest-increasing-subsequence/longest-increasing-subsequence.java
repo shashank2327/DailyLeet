@@ -17,13 +17,13 @@ class Solution {
             while (j < i) {
                 if (nums[j] < nums[i]) {
                     dp[i] = Math.max(dp[i], dp[j] + 1);
-                    max = Math.max(dp[i], max);
                 }
                 j++;
             }
             i++;
         }
 
+        for (int num : dp) max = Math.max(max, num);
         return max;
     }
 
