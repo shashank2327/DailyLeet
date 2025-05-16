@@ -9,11 +9,11 @@ class Solution {
         int[] dp = new int[n + 1];
         for (int i = n - 1; i >= 0; i--) {
             int min = Integer.MAX_VALUE;
-            for (int j = n - 1; j >= i; j--) {
+            for (int j = i; j < s.length(); j++) {
                 if (isPalindrome(s, i, j)) {
                     int cuts = 1 + dp[j + 1];
                     min = Math.min(min, cuts);
-                }
+                }   
             }
             dp[i] = min;
         }
