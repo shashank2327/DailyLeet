@@ -22,12 +22,11 @@ class Solution {
         }
 
         List<String> result = new ArrayList<>();
+        for (int i = 0; i < max; i++) result.add("0");
         for (int i = 0; i < max; i++) {
-            result.add(words[hashIndex]);
+            result.set(max - i - 1, words[hashIndex]);
             hashIndex = hash[hashIndex];
         }
-
-        Collections.reverse(result);
         return result;
     }
 
