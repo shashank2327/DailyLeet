@@ -10,11 +10,9 @@ class Solution {
         int hashIndex = 0;
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < i; j++) {
-                if (check(words[i], words[j]) && groups[i] != groups[j]) {
-                    if (dp[i] < dp[j] + 1) {
-                        dp[i] = 1 + dp[j];
-                        hash[i] = j;
-                    }
+                if (check(words[i], words[j]) && groups[i] != groups[j] && dp[i] < dp[j] + 1) {
+                    dp[i] = 1 + dp[j];
+                    hash[i] = j;        
                 }
             }
             if (dp[i] > max) {
@@ -32,18 +30,6 @@ class Solution {
         Collections.reverse(result);
         return result;
     }
-
-    private int f(String[] words, int[] groups, int i, int j) {
-        if (j == words.length) return 0;
-
-        int notTake = f(words, groups, i, j + 1);
-        int take = 0;
-        if (i == -1 || (check(words[i], words[j]) && groups[i] != groups[j])) {
-            take = 1 + f(words, groups, j, j + 1);
-        }
-        return Math.max(take, notTake);
-    }
-
 
     private boolean check (String s, String t) {
         if (s.length() != t.length()) return false;
