@@ -49,7 +49,10 @@ class Solution {
         if (s.length() != t.length()) return false;
         int cnt = 0;
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != t.charAt(i)) cnt++;
+            if (s.charAt(i) != t.charAt(i)) {
+                cnt++;
+                if (cnt > 1) return false;
+            }    
         }
 
         return cnt == 1 ? true : false;
