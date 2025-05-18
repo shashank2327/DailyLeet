@@ -12,10 +12,37 @@ class Solution {
         }
 
 
-        int[][] memo = new int[m][target.length()];
-        for (int[] row : memo) Arrays.fill(row, -1);
-        return f(mat, target, 0, 0, memo) % MOD;
+        // int[][] memo = new int[m][target.length()];
+        // for (int[] row : memo) Arrays.fill(row, -1);
+        // return f(mat, target, 0, 0, memo) % MOD;
+
+
+/*-----------------------------tabulation------------------------------------------------------*/
+
+        int[][] dp = new int[m + 1][target.length() + 1];
+        for (int i = 0; i <= m; i++) {
+            dp[i][target.length()] = 1;
+        }
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = target.length() - 1; j >= 0; j--) {
+                long notTake = dp[i + 1][j];
+                long take = 0;
+                int c = target.charAt(j) - 'a';
+                if (mat[c][i] > 0) {
+                    long ways = dp[i + 1][j + 1];
+                    take = (mat[c][i] * ways) % MOD;
+                }
+                dp[i][j] = (int)((take + notTake) % MOD);
+            }
+        }
+
+        return dp[0][0];
+
     }
+
+
+/*---------------------------------memo + recur----------------------------------------------*/
 
     // i move through column of mat
     // j point on the chracter of target, we are looking for
