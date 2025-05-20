@@ -15,33 +15,25 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer, Integer> iotMap = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++) {
-            iotMap.put(inorder[i], i);
+        Map<Integer, Integer> map = new HashMap<>();
+        int n = preorder.length;
+        for (int i = 0; i < n; i++) {
+            map.put(inorder[i], i);
         }
-
-        return fun(preorder, iotMap, 0, 0, inorder.length - 1);
+        return fun(preorder, map, 0, n - 1);
     }
 
-    private TreeNode fun(
-        int[] preorder, 
-        Map<Integer, Integer> iotMap, 
-        int rootIdx, 
-        int left, 
-        int right
-    ) {
-        
-        TreeNode root = new TreeNode(preorder[rootIdx]);
 
-        int mid = iotMap.get(preorder[rootIdx]);
-        if (mid > left) {
-            root.left = fun(preorder, iotMap, rootIdx + 1, left, mid - 1);
-        }
+    private int preorderIdx = 0;
+    private TreeNode fun(int[] preorder, Map<Integer, Integer> map, int left, int right) {
+        if(left>right) return null;
+        int pval = preorder[preorderIdx];
+        int inorderIdx = map.get(pval);
 
-        if (mid < right) {
-            root.right = fun(preorder, iotMap, rootIdx + mid - left + 1, mid + 1, right);
-        }
-
+        TreeNode root = new TreeNode(pval);
+        preorderIdx++;
+        root.left = fun(preorder, map, left, inorderIdx-1);
+        root.right = fun(preorder, map, inorderIdx+1, right);
         return root;
     }
 }
