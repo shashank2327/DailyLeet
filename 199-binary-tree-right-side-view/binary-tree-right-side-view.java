@@ -18,8 +18,6 @@ class Solution {
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
         if (root == null) return ans;
-        // level, node.val
-        Map<Integer, Integer> map = new TreeMap<>();
         Queue<TreeNode> q = new LinkedList<>();
         q.offer(root);
         int level = 0;
@@ -27,7 +25,9 @@ class Solution {
             int size = q.size();
             for (int i = 0; i < size; i++) {
                 TreeNode node = q.poll();
-                map.put(level, node.val);
+                if (i == size - 1) {
+                    ans.add(node.val);
+                }
 
                 if (node.left != null) {
                     q.offer(node.left);
@@ -39,11 +39,6 @@ class Solution {
             }
             level++;
         }
-
-        for (Map.Entry<Integer, Integer> m : map.entrySet()) {
-            ans.add(m.getValue());
-        }
-
         return ans;
     }
 }
