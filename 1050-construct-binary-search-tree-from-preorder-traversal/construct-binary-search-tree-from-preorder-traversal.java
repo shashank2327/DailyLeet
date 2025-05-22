@@ -28,15 +28,15 @@ class Solution {
         return fun(preorder, map, 0, n - 1);
     }
 
-    private int proIdx = 0;
+    // private int proIdx = 0;
 
     private TreeNode fun(int[] preorder, Map<Integer, Integer> map, int left, int right) {
         if (left > right) return null;
 
-        int val = preorder[proIdx];
+        int val = preorder[left];
         TreeNode root = new TreeNode(val);
         int idx = map.get(val);
-        proIdx++;
+        // proIdx++;
 
         root.left = fun(preorder, map, left + 1, idx);
         root.right = fun(preorder, map, idx + 1, right);
