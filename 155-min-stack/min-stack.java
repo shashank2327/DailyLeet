@@ -1,38 +1,27 @@
 class MinStack {
-
-    PriorityQueue<Integer> pq;
-    Stack<Integer> st;
-
-    // constructor
+    Stack<int[]> st;
     public MinStack() {
         st = new Stack<>();
-        pq = new PriorityQueue<>();
     }
     
-
-    //func1
     public void push(int val) {
-        st.push(val);
-        pq.add(val);
+        if (st.isEmpty()) {
+            st.push(new int[]{val, val});
+        } else {
+            st.push(new int[]{val, Math.min(val, st.peek()[1])});
+        }
     }
     
-
-    // func2
     public void pop() {
-        int val = st.peek();
-        pq.remove(val);
         st.pop();
     }
     
-    // func3
     public int top() {
-        return st.peek();
+        return st.peek()[0];
     }
     
-
-    // func4
     public int getMin() {
-        return pq.peek();
+        return st.peek()[1];
     }
 }
 
