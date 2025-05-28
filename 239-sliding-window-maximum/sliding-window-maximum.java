@@ -1,24 +1,27 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        TreeMap<Integer, Integer> map = new TreeMap<>(Collections.reverseOrder());
-        int n = nums.length;
-        int[] result = new int[n - k + 1];
 
-        for (int i = 0; i < k; i++) {
-            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
-        }
-        result[0] = map.firstKey();
-        int l = 0;
-        int r = k;
-        while (r < n) {
-            map.put(nums[r], map.getOrDefault(nums[r], 0) + 1);
-            map.put(nums[l], map.get(nums[l]) - 1);
-            if (map.get(nums[l]) == 0) {
-                map.remove(nums[l]);
+        // Maintain of deque of decreasing values;
+
+        int n = nums.length;
+        Deque<Integer> dq = new ArrayDeque<>();
+        int[] result = new int[n - k + 1];
+        int idx = 0;
+        for (int i = 0; i < nums.length; i++) {
+
+            // If the first element is not in the window size then remove it;
+            if (!dq.isEmpty() && dq.peekFirst() < i - k + 1) {
+                dq.pollFirst();
             }
-            l++;
-            result[l] = map.firstKey();
-            r++;
+
+            while(!dq.isEmpty() && nums[i] > nums[dq.peekLast()]) {
+                dq.pollLast();
+            }
+            dq.addLast(i);
+            if (i >= k - 1) {
+                result[idx] = nums[dq.peekFirst()];
+                idx++;
+            }
         }
 
         return result;
