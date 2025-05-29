@@ -26,9 +26,12 @@ class Solution {
 
 
         if (i == 0 || !(i != j + 1 && nums[i] == nums[i - 1])) {
-            temp.add(nums[i]);
-            fun(nums, target, currsum + nums[i], i + 1, i, temp, res);
-            temp.remove(temp.size() - 1);
+            if (currsum + nums[i] <= target) {
+                temp.add(nums[i]);
+                fun(nums, target, currsum + nums[i], i + 1, i, temp, res);
+                temp.remove(temp.size() - 1);
+            } 
+            
         }
 
         fun(nums, target, currsum, i + 1, j, temp, res);
