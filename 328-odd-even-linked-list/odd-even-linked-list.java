@@ -10,33 +10,25 @@
  */
 class Solution {
     public ListNode oddEvenList(ListNode head) {
-        if (head == null || head.next == null) {
+        
+        if (head == null) {
             return head;
         }
 
-        ListNode odd = new ListNode(-1);
-        ListNode oddHead = odd;
-        ListNode even = new ListNode(-1);
-        ListNode evenHead = even;
+        ListNode temp1 = head;
+        ListNode temp2 = head.next;
+        ListNode temp = temp2;
+        ListNode node = temp1;
 
-        boolean flag = true; // true means I am on the odd Index.
-
-        ListNode temp = head;
-        while (temp != null) {
-            int val = temp.val;
-            if (flag) {
-                odd.next = new ListNode(val);
-                odd = odd.next;
-            } else {
-                even.next = new ListNode(val);
-                even = even.next;
-            }
-            flag = !flag;
-            temp = temp.next;
+        while (temp2 != null && temp2.next != null) {
+            temp1.next = temp2.next;
+            temp1 = temp1.next;
+            temp2.next = temp1.next;
+            temp2 = temp2.next;
         }
 
-        odd.next = evenHead.next;
+        temp1.next = temp;
 
-        return oddHead.next;
+        return node;
     }
 }
