@@ -26,9 +26,6 @@ class Solution {
                 break;
             }
         }
-        for (int[] x : grid) {
-            System.out.println(Arrays.toString(x));
-        }
         PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
         q.offer(new int[]{r, c, 0});
         while (!q.isEmpty()) {
@@ -40,20 +37,16 @@ class Solution {
                 int nr = i + dx[k];
                 int nc = j + dy[k];
                 if (nr >= 0 && nr < n && nc >= 0 && nc < n) {
-                    if (grid[i][j] == 1 && grid[nr][nc] == 0 && !vis[nr][nc]) {
+                    if (grid[nr][nc] == 0 && !vis[nr][nc]) {
                         vis[nr][nc] = true;
                         q.offer(new int[]{nr, nc, dis + 1});
                     }
-                    if (grid[nr][nc] == 1 && grid[i][j] == 1 && !vis[nr][nc]) {
+                    if (grid[nr][nc] == 1 && !vis[nr][nc]) {
                         vis[nr][nc] = true;
                         q.offer(new int[]{nr, nc, 0});
                     }
-                    if (grid[nr][nc] == 2 && grid[i][j] == 0 && vis[nr][nc]) {
+                    if (grid[nr][nc] == 2 && vis[nr][nc]) {
                         return dis;
-                    }
-                    if (grid[nr][nc] == 0 && grid[i][j] == 0 && !vis[nr][nc]) {
-                        vis[nr][nc] = true;
-                        q.offer(new int[]{nr, nc, dis + 1});
                     }
                 }
             }
