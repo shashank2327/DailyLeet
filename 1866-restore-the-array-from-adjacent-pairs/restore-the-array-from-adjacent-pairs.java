@@ -2,7 +2,6 @@ class Solution {
     public int[] restoreArray(int[][] adjacentPairs) {
         int m = adjacentPairs.length;
         Map<Integer, List<Integer>> graph = new HashMap<>();
-        Map<Integer, Integer> outdegree = new HashMap<>();
         for (int i = 0; i < m; i++) {
             int u = adjacentPairs[i][0];
             int v = adjacentPairs[i][1];
@@ -10,12 +9,10 @@ class Solution {
             graph.putIfAbsent(v, new ArrayList<>());
             graph.get(u).add(v);
             graph.get(v).add(u);
-            outdegree.put(u, outdegree.getOrDefault(u, 0) + 1);
-            outdegree.put(v, outdegree.getOrDefault(v, 0) + 1);
         }
         Queue<Integer> q = new LinkedList<>();
-        for (int key : outdegree.keySet()) {
-            if (outdegree.get(key) == 1) {
+        for (int key : graph.keySet()) {
+            if (graph.get(key).size() == 1) {
                 q.add(key);
                 break;
             }
