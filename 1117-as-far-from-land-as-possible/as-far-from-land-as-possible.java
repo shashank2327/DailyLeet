@@ -1,15 +1,10 @@
 class Solution {
     public int maxDistance(int[][] grid) {
         int n = grid.length; 
-        int[][] dis = new int[n][n];
-        for (int[] x : dis) {
-            Arrays.fill(x, (int)1e9);
-        }
         Queue<int[]> q = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
-                    dis[i][j] = 0;
                     q.offer(new int[]{i, j});
                 }
             }
