@@ -15,13 +15,12 @@ class Solution {
             }
         }
 
-        int steps = 0;
         int maxDis = -1;
         int[] dx = {-1, 1, 0, 0};
         int[] dy = {0, 0, 1, -1};
         while (!q.isEmpty()) {
-            int sz = q.size();
-            while (sz-- > 0) {
+            // int sz = q.size();
+            // while (sz-- > 0) {
                 int[] it = q.poll();
                 for (int i = 0; i < 4; i++) {
                     int nr = dx[i] + it[0];
@@ -34,7 +33,7 @@ class Solution {
                         }
                     }
                 }
-            }
+            // }
         }
         return maxDis;
     }
