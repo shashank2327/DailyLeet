@@ -9,11 +9,11 @@ class Node {
 
     // checks if node contains a specific key
     boolean contains(char ch) {
-        return links[ch - 'a'] == null;
+        return (links[ch - 'a'] != null);
     }
     
-    void put(char ch, Node node) {
-        links[ch - 'a'] = node;
+    void put(char ch) {
+        links[ch - 'a'] = new Node();
     }
 
     Node get(char ch) {
@@ -41,9 +41,9 @@ class Trie {
         // making a temp node so that my root do not move;
         Node node = root;
         for (int i = 0; i < word.length(); i++) {
-            if (node.contains(word.charAt(i))) {
+            if (!node.contains(word.charAt(i))) {
                 // create a new node
-                node.put(word.charAt(i), new Node());
+                node.put(word.charAt(i));
             }
             // Move to the next node
             node = node.get(word.charAt(i));
@@ -54,7 +54,7 @@ class Trie {
     public boolean search(String word) {
         Node node = root; // Keeping the root fixed
         for (int i = 0; i < word.length(); i++) {
-            if (node.contains(word.charAt(i))) {
+            if (!node.contains(word.charAt(i))) {
                 return false;
             }
             node = node.get(word.charAt(i));
@@ -65,7 +65,7 @@ class Trie {
     public boolean startsWith(String prefix) {
         Node node = root;
         for (int i = 0; i < prefix.length(); i++) {
-            if (node.contains(prefix.charAt(i))) {
+            if (!node.contains(prefix.charAt(i))) {
                 return false;
             }
             node = node.get(prefix.charAt(i));
