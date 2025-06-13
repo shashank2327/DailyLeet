@@ -1,7 +1,11 @@
 class Node {
-    Node[] links = new Node[26];
-    boolean flag = false;
+    Node[] links;
+    boolean flag;
 
+    public Node() {
+        links = new Node[26];
+        flag = false;
+    }
 
     // checks if node contains a specific key
     boolean contains(char ch) {
