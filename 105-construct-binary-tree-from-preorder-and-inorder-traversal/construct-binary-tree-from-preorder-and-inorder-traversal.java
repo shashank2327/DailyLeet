@@ -15,25 +15,35 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer, Integer> map = new HashMap<>();
-        int n = preorder.length;
+        int n = inorder.length;
+        Map<Integer, Integer> nodeToIdx = new HashMap<>(); // for inorder array
         for (int i = 0; i < n; i++) {
-            map.put(inorder[i], i);
+            nodeToIdx.put(inorder[i], i);
         }
-        return fun(preorder, map, 0, n - 1);
+        return buildTree(preorder, inorder, nodeToIdx, 0, n - 1);
     }
+    int preorderIdx = 0;
+    private TreeNode buildTree(
+        int[] preorder,
+        int[] inorder,
+        Map<Integer, Integer> nodeToIdx,
+        int l,
+        int r
+    ) 
+    {
+        if (l > r) {
+            return null;
+        }
 
+        TreeNode root = new TreeNode(preorder[preorderIdx++]);
+        int inorderIdx = nodeToIdx.get(root.val);
 
-    private int preorderIdx = 0;
-    private TreeNode fun(int[] preorder, Map<Integer, Integer> map, int left, int right) {
-        if(left>right) return null;
-        int pval = preorder[preorderIdx];
-        int inorderIdx = map.get(pval);
+        root.left = buildTree(preorder, inorder, nodeToIdx, l, inorderIdx - 1);
+        root.right = buildTree(preorder, inorder, nodeToIdx, inorderIdx + 1, r);
 
-        TreeNode root = new TreeNode(pval);
-        preorderIdx++;
-        root.left = fun(preorder, map, left, inorderIdx-1);
-        root.right = fun(preorder, map, inorderIdx+1, right);
         return root;
     }
 }
+
+// p -> 3, 9, 20, 15, 7   root -> left -> right
+// i -> 9, 3, 15, 20, 7   left -> root -> right
