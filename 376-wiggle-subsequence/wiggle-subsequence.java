@@ -29,10 +29,6 @@ class Solution {
 
         while (i < n) {
             int curr = nums[i] - nums[i - 1];
-            if (curr == 0) {
-                i++;
-                continue;
-            }
             if ((curr > 0 && prev < 0) || (curr < 0 && prev > 0)) {
                 prev = curr;
                 cnt++;
