@@ -53,15 +53,18 @@ class Solution {
         int n = grid.length;
         DisjointSet ds = new DisjointSet(n * n - 1);
 
+        int[] dx = {1, -1, 0, 0};
+        int[] dy = {0, 0, 1, -1};
+
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 if (grid[row][col] == 0) continue;
-                int[] dx = {1, -1, 0, 0};
-                int[] dy = {0, 0, 1, -1};
                 for (int i = 0; i < 4; i++) {
-                    int nr = row + dx[i];
-                    int nc = col + dy[i];
-                    if (nr < n && nc < n && nr >= 0 && nc >= 0 && grid[nr][nc] == 1) {
+                    int nr = dx[i] + row;
+                    int nc = dy[i] + col;
+                    if (nr < n && nc < n && nr >= 0 && nc >= 0 &&
+                        grid[nr][nc] == 1
+                    ) {
                         int currNode = row * n + col;
                         int adjNode = nr * n + nc;
                         ds.unionBySize(currNode, adjNode);
@@ -74,28 +77,28 @@ class Solution {
         for (int row = 0; row < n; row++) {
             for (int col = 0; col < n; col++) {
                 if (grid[row][col] == 1) continue;
-                int[] dx = {1, -1, 0, 0};
-                int[] dy = {0, 0, 1, -1};
                 Set<Integer> set = new HashSet<>();
                 for (int i = 0; i < 4; i++) {
                     int nr = row + dx[i];
                     int nc = col + dy[i];
-                    if (nr < n && nc < n && nr >= 0 && nc >= 0 && grid[nr][nc] == 1) {
+                    if (nr < n && nc < n && nr >= 0 && nc >= 0 &&
+                        grid[nr][nc] == 1
+                    ) {
                         int node = nr * n + nc;
-                        set.add(ds.findUPar(node)); 
+                        set.add(ds.findUPar(node));
                     }
                 }
 
                 int currSize = 0;
                 for (int ultParent : set) {
-                    currSize += ds.size.get(ultParent);  // getting size of ultimate parent
+                    currSize += ds.size.get(ultParent);
                 }
 
                 max = Math.max(max, currSize + 1);
             }
         }
 
-        for (int i = 0; i < n * n; i++) {
+        for (int i = 0; i < n *n; i++) {
             max = Math.max(max, ds.size.get(ds.findUPar(i)));
         }
 
