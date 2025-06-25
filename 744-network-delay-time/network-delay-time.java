@@ -1,60 +1,54 @@
 class Pair {
-    int first;
-    int second;
+    int time;
+    int node;
 
-    Pair (int first , int second) {
-        this.first = first;
-        this.second = second;
+    public Pair(int time, int node) {
+        this.time = time;
+        this.node = node;
     }
 }
 
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        
-        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
-        for (int i = 0; i <= n; i++) {
-            adj.add(new ArrayList<>());
+        List<List<int[]>> graph = new ArrayList<>();
+        for (int i = 0; i < n; i++) graph.add(new ArrayList<>());
+        for (int[] edge : times) {
+            int u = edge[0] - 1;
+            int v = edge[1] - 1;
+            int t = edge[2];
+            graph.get(u).add(new int[] {v, t});
         }
 
-        int m = times.length;
-        for (int i = 0; i < m; i++) {
-            int u = times[i][0];
-            int v = times[i][1];
-            int w = times[i][2];
-            adj.get(u).add(new Pair(v, w));
-        }
+        int[] minTime = new int[n]; // minimum time to reach every node;
+        Arrays.fill(minTime, (int)1e9);
 
-        int[] dis = new int[n + 1];
-        Arrays.fill(dis, (int)1e9);
-        PriorityQueue<Pair> pq = new PriorityQueue<>((x, y) -> x.first - y.first);
+        PriorityQueue<Pair> pq = new PriorityQueue<>((p1, p2) -> p1.time - p2.time);
+        minTime[k - 1] = 0;
 
-        dis[k] = 0;
-        pq.add(new Pair(0, k));
-
+        pq.offer(new Pair(0, k - 1));
         while (!pq.isEmpty()) {
-            int t = pq.peek().first;
-            int nde = pq.peek().second;
-            pq.remove();
+            Pair it = pq.poll();
+            int time = it.time;
+            int node = it.node;
 
-            for (int i = 0; i < adj.get(nde).size(); i++) {
-                int nd = adj.get(nde).get(i).first;
-                int tm = adj.get(nde).get(i).second;
+            if (minTime[node] < time) continue;
 
-                if (tm + t < dis[nd]) {
-                    dis[nd] = tm + t;
-                    pq.add(new Pair(tm + t, nd));
+            for (int[] childs : graph.get(node)) {
+                int child = childs[0];
+                int edgeWt = childs[1];
+                if (edgeWt + time < minTime[child]) {
+                    minTime[child] = edgeWt + time;
+                    pq.offer(new Pair(minTime[child], child));
                 }
             }
         }
 
-        int max = 0;
+        int max = -1;
 
-        for (int i = 1; i <= n; i++) {
-            if (dis[i] == (int) 1e9) return -1;
-            else max = Math.max(max, dis[i]);
+        for (int num : minTime) {
+            max = Math.max(max, num);
         }
 
-
-        return max;
+        return max == (int)1e9 ? -1 : max;
     }
 }
