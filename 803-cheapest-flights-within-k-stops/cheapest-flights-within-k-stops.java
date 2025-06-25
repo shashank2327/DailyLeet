@@ -1,65 +1,54 @@
 class Pair {
-    int cost;
     int node;
+    int cost;
 
-    Pair (int node, int cost) {
+    public Pair(int node, int cost) {
         this.node = node;
         this.cost = cost;
     }
 }
 
-class Tuple {
-    int first;
-    int second;
-    int third;
-
-    Tuple (int first, int second, int third) {
-        this.first = first;
-        this.second = second;
-        this.third = third;
-    }
-
-}
-
 class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            adj.add(new ArrayList<>());
+            graph.add(new ArrayList<>());
+        }
+        for (int[] route : flights) {
+            int u = route[0];
+            int v = route[1];
+            int cst = route[2];
+            graph.get(u).add(new int[]{v, cst});
         }
 
-        for (int i = 0; i < flights.length; i++) {
-            adj.get(flights[i][0]).add(new Pair(flights[i][1], flights[i][2]));
-        }
+        int[] minCost = new int[n];
+        Arrays.fill(minCost, (int)1e9);
 
-        Queue<Tuple> q = new LinkedList<>();
-        q.add(new Tuple(0, src, 0));
-        int[] cst = new int[n];
-        Arrays.fill(cst, (int)1e9);
-        cst[src] = 0;
-
+        Queue<Pair> q = new LinkedList<>();
+        minCost[src] = 0;
+        q.offer(new Pair(src, 0));
+        int level = 0;
         while (!q.isEmpty()) {
-            Tuple it = q.peek();
-            q.remove();
-            int stp = it.first;
-            int nd = it.second;
-            int c = it.third;
+            if (level > k) break;
+            int sz = q.size();
+            while(sz-- > 0) {
+                Pair it = q.poll();
+                int node = it.node;
+                int cost = it.cost;
 
-            // if (stp > k) {
-            //     continue;
-            // }
+                for (int[] child : graph.get(node)) {
+                    int childNode = child[0];
+                    int costReq = child[1];
 
-            for (int i = 0; i < adj.get(nd).size(); i++) {
-                int adjNode = adj.get(nd).get(i).node;
-                int eW = adj.get(nd).get(i).cost;
-
-                if (eW + c < cst[adjNode] && stp <= k) {
-                    cst[adjNode] = eW + c;
-                    q.add(new Tuple(stp + 1, adjNode, c + eW));
+                    if (costReq + cost < minCost[childNode]) {
+                        minCost[childNode] = costReq + cost;
+                        q.offer(new Pair(childNode, costReq + cost));
+                    }
                 }
             }
+            level++;
         }
 
-        return cst[dst] == (int)1e9 ? -1 : cst[dst];
+        return minCost[dst] == (int)1e9 ? -1 : minCost[dst];
     }
 }
