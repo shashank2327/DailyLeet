@@ -14,33 +14,24 @@
  * }
  */
 class Solution {
+    int idx;
     public TreeNode bstFromPreorder(int[] preorder) {
-        int n = preorder.length;
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            map.put(preorder[i], i);
-            for (int j = i + 1; j < n; j++) {
-                if (preorder[j] < preorder[i]) {
-                    map.put(preorder[i], j);
-                }
-            }
-        }
-        return fun(preorder, map, 0, n - 1);
+        idx = 0;
+        return build(preorder, Integer.MAX_VALUE);
     }
 
-    // private int proIdx = 0;
-
-    private TreeNode fun(int[] preorder, Map<Integer, Integer> map, int left, int right) {
-        if (left > right) return null;
-
-        int val = preorder[left];
-        TreeNode root = new TreeNode(val);
-        int idx = map.get(val);
-        // proIdx++;
-
-        root.left = fun(preorder, map, left + 1, idx);
-        root.right = fun(preorder, map, idx + 1, right);
+    public TreeNode build(int[] preorder, int bound) {
+        if (idx == preorder.length || preorder[idx] > bound) {
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[idx]);
+        idx++;
+        root.left = build(preorder, root.val);
+        root.right = build(preorder, bound);
 
         return root;
     }
 }
+
+// 8, 5, 1, 7, 10, 12;
+// 1, 5, 7, 8, 10, 12;
