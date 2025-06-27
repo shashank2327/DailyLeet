@@ -1,39 +1,30 @@
 class Solution {
-    public List<List<Integer>> combinationSum2(int[] nums, int target) {
-        Arrays.sort(nums);
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
         List<List<Integer>> res = new ArrayList<>();
-        fun(nums, target, 0, 0, -1, new ArrayList<>(), res);
+        fun(candidates, 0, 0, target, new ArrayList<>(), res);
         return res;
     }
-    
-    private void fun(
-        int[] nums,
-        int target,
-        int currsum,
-        int i,
-        int j,
-        List<Integer> temp,
-        List<List<Integer>> res
-    ){
 
-        if (currsum == target) {
+    public void fun(int[] nums, int idx, int curr, int target, List<Integer> temp, List<List<Integer>> res) {
+        if (curr == target) {
             res.add(new ArrayList<>(temp));
             return;
         }
-        if (currsum > target || i == nums.length) {
+
+        if (curr > target || idx == nums.length) {
             return;
         }
 
+        for (int i = idx; i < nums.length; i++) {
+            if (i > idx && nums[i] == nums[i - 1]) {
+                continue;
+            }
 
-        if (i == 0 || !(i != j + 1 && nums[i] == nums[i - 1])) {
-            if (currsum + nums[i] <= target) {
-                temp.add(nums[i]);
-                fun(nums, target, currsum + nums[i], i + 1, i, temp, res);
-                temp.remove(temp.size() - 1);
-            } 
-            
+            temp.add(nums[i]);
+            fun(nums, i + 1, curr + nums[i], target, temp, res);
+
+            temp.remove(temp.size() - 1);
         }
-
-        fun(nums, target, currsum, i + 1, j, temp, res);
     }
 }
