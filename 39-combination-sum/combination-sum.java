@@ -5,20 +5,20 @@ class Solution {
         return res;
     }
 
-    private void fun(int[] nums, int i, int currsum, int target,List<Integer> temp, List<List<Integer>> res) {
+    private void fun(int[] nums, int idx, int currsum, int target,List<Integer> temp, List<List<Integer>> res) {
 
         if (currsum == target) {
             res.add(new ArrayList<>(temp));
             return;
         }
-        if (currsum > target || i == nums.length) {
+        if (currsum > target || idx == nums.length) {
             return;
         }
 
-        //take the same element again
-        temp.add(nums[i]);
-        fun(nums, i, currsum + nums[i], target, temp, res);
-        temp.remove(temp.size() - 1);
-        fun(nums, i + 1, currsum,target, temp, res);
+        for (int i = idx; i < nums.length; i++) {
+            temp.add(nums[i]);
+            fun(nums, i, currsum + nums[i], target, temp, res);
+            temp.remove(temp.size() - 1);
+        }
     }
 }
