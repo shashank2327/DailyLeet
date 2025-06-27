@@ -1,44 +1,39 @@
 class Solution {
     public List<List<String>> partition(String s) {
         List<List<String>> res = new ArrayList<>();
-        fun(s, 0, -1, "", new ArrayList<>(), res);
+        fun(s, 0, new ArrayList<>(), res);
         return res;
-    }   
-
-    private void fun(
-        String s,
-        int i,
-        int j,
-        String t,
-        List<String> temp,
-        List<List<String>> res
-    ) {
-        if (i >= s.length()) {
-            if (t.equals(s)) {
-                res.add(new ArrayList<>(temp));
-            }  
+    }
+    public void fun(String s, int startIdx, List<String> temp, List<List<String>> res) {
+        
+        if (startIdx == s.length()) {
+            res.add(new ArrayList<>(temp));
             return;
         }
 
-        String str = s.substring(j + 1, i + 1);
-        if (check(str)) {
-            temp.add(str);
-            fun(s, i + 1, i, t + str, temp, res);
-            temp.remove(temp.size() - 1);
+        for (int i = startIdx; i < s.length(); i++) {
+            String subStr = s.substring(startIdx, i + 1);
+            if (isPalindrome(subStr)) {
+                temp.add(subStr);
+                fun(s, i + 1, temp, res);
+                temp.remove(temp.size() - 1);
+            }
+            
         }
-        
-        fun(s, i + 1, j, t, temp, res);    
     }
 
-    private boolean check(String s) {
-        int l = 0;
-        int r = s.length() - 1;
-        while (l < r) {
-            if (s.charAt(l) != s.charAt(r)) {
+    // sIdx = 0; ->> n "aab" -> a [0, 1) [1,)
+
+
+    private boolean isPalindrome(String s) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
                 return false;
             }
-            l++;
-            r--;
+            i++;
+            j--;
         }
         return true;
     }
