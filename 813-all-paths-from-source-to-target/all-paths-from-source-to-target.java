@@ -1,35 +1,30 @@
 class Solution {
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        List<List<Integer>> paths = new ArrayList<>();
-        findPath(0, graph, paths, new ArrayList<>());
-        return paths;
+        int n = graph.length;
+        boolean[] vis = new boolean[n];
+        List<List<Integer>> result = new ArrayList<>();
+        dfs(graph, 0, vis, new ArrayList<>(), result);
+        return result;
     }
 
-
-    private void findPath(
-        int node, 
-        int[][] graph, 
-        List<List<Integer>> ans, 
-        List<Integer> curr
-    ) {
-
-        curr.add(node);
-
-        // If the node I am one is the destination node;
-        // Add the path to the answer\t List;
-        // Then backtrack.
+    private void dfs(int[][] graph, int node, boolean[] vis, List<Integer> path, List<List<Integer>> result) {
+        // base case
         if (node == graph.length - 1) {
-            ans.add(new ArrayList<>(curr));
-            curr.remove(curr.size() - 1);
-            return;
+            path.add(node);
+            result.add(new ArrayList<>(path));
+            path.remove(path.size() - 1);
         }
 
-        // If we didn't reach the destination then explore;
+        vis[node] = true;
+        path.add(node);
 
-        for (int i : graph[node]) {
-            findPath(i, graph, ans, curr);
+        for (int i = 0; i < graph[node].length; i++) {
+            if (!vis[graph[node][i]]) {
+                dfs(graph, graph[node][i], vis, path, result);
+            }
         }
 
-        curr.remove(curr.size() - 1);
+        vis[node] = false;
+        path.remove(path.size() - 1);
     }
 }
