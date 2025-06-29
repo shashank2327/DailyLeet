@@ -1,62 +1,52 @@
 class Quad {
-    int tm;
+    int time;
     boolean flag;
     int row;
     int col;
 
-    public Quad (int tm, boolean flag, int row, int col) {
-        this.tm = tm;
+    public Quad(int time, boolean flag, int row, int col) {
+        this.time = time;
         this.flag = flag;
         this.row = row;
         this.col = col;
     }
 }
-
 class Solution {
     public int minTimeToReach(int[][] moveTime) {
         int n = moveTime.length;
         int m = moveTime[0].length;
 
-        long[][] time = new long[n][m];
-        for (long[] x : time) {
-            Arrays.fill(x, Long.MAX_VALUE);
+        int[][] minTime = new int[n][m];
+        for (int[] row : minTime) {
+            Arrays.fill(row, Integer.MAX_VALUE);
         }
-        time[0][0] = 0;
 
-        PriorityQueue<Quad> pq = new PriorityQueue<>((x, y) -> x.tm - y.tm);
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+        PriorityQueue<Quad> pq = new PriorityQueue<>((q1, q2) -> q1.time - q2.time);
+        minTime[0][0] = 0;
         pq.offer(new Quad(0, true, 0, 0));
 
         while (!pq.isEmpty()) {
-            int t = pq.peek().tm;
-            boolean f = pq.peek().flag;
-            int r = pq.peek().row;
-            int c = pq.peek().col;
-            pq.remove();
+            Quad token = pq.poll();
+            int time = token.time;
+            boolean flag = token.flag;
+            int row = token.row;
+            int col = token.col;
 
-            if (t > time[r][c]) continue;
+            if (row == n - 1 && col == m - 1) {
+                return time;
+            }
 
-            if (r == n - 1 && c == m - 1) return t;
-
-            int[] dx = {1, 0, -1, 0};
-            int[] dy = {0, -1, 0, 1};
-            
             for (int i = 0; i < 4; i++) {
-                int nr = r + dx[i];
-                int nc = c + dy[i];
-
+                int nr = dx[i] + row;
+                int nc = dy[i] + col;
                 if (nr >= 0 && nc >= 0 && nr < n && nc < m) {
-                    if (t >= moveTime[nr][nc]) {
-                        int newTime = f == true ? t + 1 : t + 2;
-                        if (newTime < time[nr][nc]) {
-                            time[nr][nc] = newTime;
-                            pq.add(new Quad(newTime, !f, nr, nc));
-                        }
-                    } else {
-                        int newTime = f == true ? moveTime[nr][nc] + 1 : moveTime[nr][nc] + 2;
-                        if (newTime < time[nr][nc]) {
-                            time[nr][nc] = newTime;
-                            pq.add(new Quad(newTime, !f, nr, nc));
-                        }
+                    int travelTime = flag ? 1 : 2;
+                    int timeRequired = Math.max(time, moveTime[nr][nc]) + travelTime;
+                    if (timeRequired < minTime[nr][nc]) {
+                        minTime[nr][nc] = timeRequired;
+                        pq.offer(new Quad(timeRequired, !flag, nr, nc));
                     }
                 }
             }
