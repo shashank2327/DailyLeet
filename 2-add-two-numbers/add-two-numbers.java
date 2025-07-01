@@ -18,7 +18,8 @@ class Solution {
 
         int carry = 0;
         while (ls1 != null || ls2 != null) {
-            int sum  = 0 + carry;
+            int sum = 0 + carry;
+
             if (ls1 != null) {
                 sum += ls1.val;
                 ls1 = ls1.next;
@@ -40,3 +41,8 @@ class Solution {
         return result.next;
     }
 }
+
+/*
+9 9 9 9 9 9 9
+9 9 9 9
+8 9 9 9 0 0 0 1*/
