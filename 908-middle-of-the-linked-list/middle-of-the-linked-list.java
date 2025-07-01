@@ -10,8 +10,6 @@
  */
 class Solution {
     public ListNode middleNode(ListNode head) {
-        // concept of slow ptr and fast ptr;
-
         ListNode slow = head;
         ListNode fast = head;
 
