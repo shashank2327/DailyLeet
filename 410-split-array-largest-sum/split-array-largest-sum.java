@@ -25,7 +25,7 @@ class Solution {
 
     public boolean possible(int[] nums, int k, int sum) {
         // count the number of subarray such that the sum <= k;
-        int cnt = 1;
+        int cnt = 0;
         int currSum = 0;
         for (int i = 0; i < nums.length; i++) {
             if (nums[i] > sum) return false;
@@ -36,7 +36,7 @@ class Solution {
                 currSum = nums[i];
             }
         } 
-
+        cnt++;
         if (cnt <= k) {
             return true; 
         } else {
