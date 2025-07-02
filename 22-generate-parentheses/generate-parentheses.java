@@ -1,35 +1,30 @@
 class Solution {
     public List<String> generateParenthesis(int n) {
-        List<String> ls = new ArrayList<>();
-        generate(2 * n, ls, "");
-        return ls;
+        List<String> result = new ArrayList<>();
+        solve(result, n, 0, 0, "");
+        return result;
     }
-    public void generate(int n, List<String> result, String s) {
-        if (n == 0) {
-            if (isValid(s)) {
-                result.add(s);
-            }
+
+    public void solve(List<String> list, int n, int ob, int cb, String s) {
+        // base condition;
+        if (ob == n && cb == n) {
+            list.add(s);
             return;
         }
 
-        generate(n - 1, result, s + '(');
-        generate(n - 1, result, s + ')');
-    }
-
-    public boolean isValid(String s) {
-        Stack<Character> st = new Stack<>();
-        for (char ch : s.toCharArray()) {
-            if (ch == '(') {
-                st.push('(');
-            } else {
-                if (st.isEmpty() || st.peek() != '(') {
-                    return false;
-                } else {
-                    st.pop();
-                }
-            }
+        if (ob == n) {
+            solve(list, n, ob, cb + 1, s + ")");
+        } else if (ob == cb) {
+            solve(list, n, ob + 1, cb, s + "(");
+        } else {
+            solve(list, n, ob + 1, cb, s + "(");
+            solve(list, n, ob, cb + 1, s + ")");
         }
-
-        return st.isEmpty();
     }
-}
+} 
+
+
+// The main idea over here is ->
+// if (open bracket used == n; then we must use close bracket now);
+// if (open bracket == close bracket); then we must use open bracket again;
+// else append both;
