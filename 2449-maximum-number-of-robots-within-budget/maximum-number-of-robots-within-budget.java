@@ -1,41 +1,91 @@
-
 class Solution {
     public int maximumRobots(int[] chargeTimes, int[] runningCosts, long budget) {
         int n = chargeTimes.length;
-        // max-heap by chargeTime
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]); 
+        int lo = 1;
+        int hi = n;
+        int max = 0;
 
-        int left = 0, right = 0;
-        long sum = 0;
-        int maxSize = 0;
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
 
-        while (right < n) {
-            pq.offer(new int[]{chargeTimes[right], right}); // {chargeTime, index}
-            sum += runningCosts[right];
+            int[] res = maxSlidingWindow(chargeTimes, mid);
+            long[] sum = windowSum(runningCosts, mid);
+            // System.out.println(Arrays.toString(res));
+            // System.out.println(Arrays.toString(sum));
+            boolean flag = false;
 
-            // Remove robots whose index is out of the current window
-            while (!pq.isEmpty() && pq.peek()[1] < left) {
-                pq.poll();
-            }
+            for (int i = 0; i < res.length; i++) {
+                long cost = res[i] + mid * (sum[i]);
 
-            // Calculate cost
-            long cost = !pq.isEmpty() ? pq.peek()[0] + (long)(right - left + 1) * sum : Long.MAX_VALUE;
-
-            // Shrink window if over budget
-            while (left <= right && cost > budget) {
-                sum -= runningCosts[left];
-                left++;
-                while (!pq.isEmpty() && pq.peek()[1] < left) {
-                    pq.poll();
+                if (cost <= budget) {
+                    flag = true;
+                    break;
                 }
-                cost = !pq.isEmpty() ? pq.peek()[0] + (long)(right - left + 1) * sum : Long.MAX_VALUE;
             }
 
-            // Update max size of valid subarray
-            maxSize = Math.max(maxSize, right - left + 1);
-            right++;
+            if (flag) {
+                max = mid;
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+        
+        return max;
+    }
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        
+        int n = nums.length;
+        Deque<Integer> dq = new ArrayDeque<>();
+
+        int[] res = new int[n - (k - 1)];
+        int idx = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            // If the top value of my deque is out of the window then get it out of the dq;
+            while (!dq.isEmpty() && i - dq.peekFirst() >= k) {
+                dq.pollFirst();
+            }
+
+            while (!dq.isEmpty() && nums[i] > nums[dq.peekLast()]) {
+                dq.pollLast();
+            }
+            dq.addLast(i);
+
+            if (i >= k - 1) {
+                res[idx++] = nums[dq.peekFirst()];
+            }
         }
 
-        return maxSize;
+        return res;
+    }
+
+
+    public long[] windowSum(int[] nums, int k) {
+        int n = nums.length;
+        long[] res = new long[n - (k - 1)];
+        long sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+
+        res[0] = sum;
+        int l = 0;
+        int r = k;
+        int idx = 1;
+        while (r < n) {
+            sum += nums[r] - nums[l];
+            res[idx] = sum;
+            idx++;
+            r++;
+            l++;
+        }
+        return res;
     }
 }
+
+// binary Search approach ->
+// minimum window size = 0;
+// maximum window size = length of the array;
