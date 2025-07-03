@@ -1,48 +1,53 @@
 class Solution {
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
-        List<Integer> res = new ArrayList<>();
+
+        List<Integer> result = new ArrayList<>();
         if (n == 1) {
-            res.add(0);
-            return res;
+            result.add(0);
+            return result;
         }
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        List<List<Integer>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            adj.add(new ArrayList<>());
+            graph.add(new ArrayList<>());
         }
-        int m = edges.length;
         int[] indegree = new int[n];
-        for (int i = 0; i < m; i++) {
-            indegree[edges[i][0]]++;
-            indegree[edges[i][1]]++;
-            adj.get(edges[i][0]).add(edges[i][1]);
-            adj.get(edges[i][1]).add(edges[i][0]);
+        for (int[] edge : edges) {
+            int nodeA = edge[0];
+            int nodeB = edge[1];
+            graph.get(nodeA).add(nodeB);
+            graph.get(nodeB).add(nodeA);
+            indegree[nodeA]++;
+            indegree[nodeB]++;
         }
 
-        Queue<Integer> q = new LinkedList<>();
-
+        // for breadth first search;
+        Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             if (indegree[i] == 1) {
-                q.offer(i);
+                queue.add(i);
             }
         }
 
         while (n > 2) {
-            int size = q.size();
-            n -= size;
+            int size = queue.size();
+            n = n - size;
             for (int i = 0; i < size; i++) {
-                int node = q.remove();
-                for (int adjNode : adj.get(node)) {
+                int node = queue.poll();
+                for (int adjNode : graph.get(node)) {
                     indegree[adjNode]--;
                     if (indegree[adjNode] == 1) {
-                        q.offer(adjNode);
+                        queue.offer(adjNode);
                     }
                 }
             }
         }
 
-        while (!q.isEmpty()) {
-            res.add(q.remove());
+        while (!queue.isEmpty()) {
+            result.add(queue.poll());
         }
-        return res;
+
+
+        return result;
     }
 }
