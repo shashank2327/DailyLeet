@@ -1,54 +1,55 @@
 class Pair {
-    int node;
-    int factor;
+    int node; // node i am directed to;
+    int factor; // factor required;
 
-    public Pair (int node, int factor) {
+    public Pair(int node, int factor) {
         this.node = node;
         this.factor = factor;
     }
 }
-
 class Solution {
-    public static final int MOD = (int) (1e9 + 7);
+
+    private static final int MOD = (int)1e9 + 7;
+
     public int[] baseUnitConversions(int[][] conversions) {
-        int len = conversions.length + 1;
-        int[] a = new int[len];
-        a[0] = 1;
-
-        // go to every node from 0 keeping track of previous factor;
-
-        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
-        for (int i = 0; i < len; i++) {
-            adj.add(new ArrayList<>());
+        
+        int nodes = conversions.length + 1;
+        List<List<Pair>> graph = new ArrayList<>();
+        for (int i = 0; i < nodes; i++) {
+            graph.add(new ArrayList<>());
         }
-        for (int i = 0; i < len - 1; i++) {
-            int node1 = conversions[i][0];
-            int node2 = conversions[i][1];
-            int fac = conversions[i][2];
 
-            adj.get(node1).add(new Pair(node2, fac));
+        
+        for (int[] conversion : conversions) {
+            int source = conversion[0];
+            int target = conversion[1];
+            int factor = conversion[2];
+
+            graph.get(source).add(new Pair(target, factor));
         }
+
+        int[] baseUnit = new int[nodes];
 
         Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(0, 1));
+        baseUnit[0] = 1;
+        q.offer(new Pair(0, 1));
 
         while (!q.isEmpty()) {
-            int n = q.peek().node;
-            int f = q.peek().factor;
-            q.remove();
+            Pair token = q.poll();
+            int node = token.node;
+            int prevFactor = token.factor;
 
-            for (Pair p : adj.get(n)) {
-                int n1 = p.node;
-                long fac = p.factor;
-                if (a[n1] == 0) {
-                    long val = f * fac;
-                    int actual = (int) (val % MOD);
-                    a[n1] = actual;
-                    q.add(new Pair(n1, a[n1]));
-                }
+            for (Pair adj : graph.get(node)) {
+                int adjNode = adj.node;
+                long currentFactor = adj.factor;
+                if (baseUnit[adjNode] == 0) {
+                    long baseFactor = (currentFactor * prevFactor) % MOD;
+                    baseUnit[adjNode] = (int)baseFactor;
+                    q.offer(new Pair(adjNode, (int)baseFactor));
+                } 
             }
         }
 
-        return a;
+        return baseUnit;
     }
 }
