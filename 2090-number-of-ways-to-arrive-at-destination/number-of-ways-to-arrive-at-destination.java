@@ -1,46 +1,53 @@
 class Solution {
+    private static final int MOD = (int)1e9 + 7;
     public int countPaths(int n, int[][] roads) {
-        ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+        
+        List<List<int[]>> graph = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            adj.add(new ArrayList<>());
+            graph.add(new ArrayList<>());
         }
 
-        for (int[] x : roads) {
-            adj.get(x[0]).add(new int[]{x[2], x[1]});
-            adj.get(x[1]).add(new int[]{x[2], x[0]});
+        for (int[] road : roads) {
+            int u = road[0];
+            int v = road[1];
+            int timeTaken = road[2];
+
+            graph.get(u).add(new int[] {v, timeTaken});
+            graph.get(v).add(new int[] {u, timeTaken});
         }
 
-        int mod = 1_000_000_007;
-        PriorityQueue<long[]> q = new PriorityQueue<>((a, b) -> Long.compare(a[0], b[0]));
-        q.add(new long[]{0, 0});
+
         long[] time = new long[n];
         Arrays.fill(time, Long.MAX_VALUE);
-        int[] count = new int[n];
 
+        int[] ways = new int[n];
+
+
+        // {node, timeTakenToReach}
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[0], b[0]));
         time[0] = 0;
-        count[0] = 1;
+        ways[0] = 1;
+        pq.offer(new long[]{0, 0});
+        
+        while (!pq.isEmpty()) {
+            long[] token = pq.poll();
+            long timeTaken = token[0];
+            int node = (int)token[1];
 
-        while (!q.isEmpty()) {
-            long[] curr = q.poll();
+            for (int[] adj : graph.get(node)) {
+                int adjNode = adj[0];
+                int tm = adj[1];
 
-            int node = (int) curr[1];
-            long currTime = curr[0];
-
-            // if (time[node] < currTime) continue;
-
-            for (int[] x : adj.get(node)) {
-                long nextTime = (currTime + x[0]);
-
-                if (nextTime < time[x[1]]) {
-                    time[x[1]] = nextTime;
-                    count[x[1]] = count[node];
-                    q.offer(new long[]{time[x[1]], x[1]});
-                } else if (nextTime == time[x[1]]) {
-                    count[x[1]] = (count[x[1]] + count[node]) % mod;
+                if (tm + timeTaken < time[adjNode]) {
+                    time[adjNode] = tm + timeTaken;
+                    ways[adjNode] = (ways[node]) % MOD;
+                    pq.offer(new long[]{time[adjNode], adjNode});
+                } else if (tm + timeTaken == time[adjNode]) {
+                    ways[adjNode] = (ways[adjNode] + ways[node]) % MOD;
                 }
             }
         }
 
-        return count[n - 1];
+        return ways[n - 1];
     }
 }
