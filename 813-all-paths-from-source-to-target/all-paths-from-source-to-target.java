@@ -1,30 +1,30 @@
 class Solution {
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        int n = graph.length;
-        boolean[] vis = new boolean[n];
         List<List<Integer>> result = new ArrayList<>();
-        dfs(graph, 0, vis, new ArrayList<>(), result);
+        allPaths(0, graph, graph.length, new boolean[graph.length], new ArrayList<>(), result);
         return result;
     }
 
-    private void dfs(int[][] graph, int node, boolean[] vis, List<Integer> path, List<List<Integer>> result) {
-        // base case
-        if (node == graph.length - 1) {
-            path.add(node);
-            result.add(new ArrayList<>(path));
-            path.remove(path.size() - 1);
+    public void allPaths(int node, int[][] graph, int n, boolean[] vis, List<Integer> temp, List<List<Integer>> result) {
+
+        // base case;
+        // If i am on my last node, I found a path;
+        if (node == n - 1) {
+            temp.add(node);
+            result.add(new ArrayList<>(temp));
+            temp.remove(temp.size() - 1);
         }
 
         vis[node] = true;
-        path.add(node);
+        temp.add(node);
 
         for (int i = 0; i < graph[node].length; i++) {
             if (!vis[graph[node][i]]) {
-                dfs(graph, graph[node][i], vis, path, result);
+                allPaths(graph[node][i], graph, n, vis, temp, result);
             }
         }
 
         vis[node] = false;
-        path.remove(path.size() - 1);
+        temp.remove(temp.size() - 1);
     }
 }
