@@ -8,15 +8,19 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-
 class Solution {
     public void reorderList(ListNode head) {
-        if (head ==  null || head.next == null) return;
+        if (head == null || head.next == null) {
+            return;
+        }
 
         // cut the list into two halves;
-        // prev will be the tail of 1st half;
-        // slow will be the head of 2nd half;
-        ListNode prev = null, slow = head, fast = head, l1 = head;
+        // prev will be the tail of the 1st half;
+        // slow will be the head of the 2nd half;
+        ListNode prev = null;
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode l1 = head;   //  first half head;
 
         while (fast != null && fast.next != null) {
             prev = slow;
@@ -24,15 +28,18 @@ class Solution {
             fast = fast.next.next;
         }
 
+
+        // Divide the LL in 2 part;
         prev.next = null;
 
-        // Reverse the second half
+
+        // head of the 2nd half;
         ListNode l2 = reverse(slow);
 
-        // Merge both of them;
+        // Merge both the list;
         merge(l1, l2);
-
     }
+
 
     public ListNode reverse(ListNode head) {
         ListNode prev = null;
@@ -43,24 +50,35 @@ class Solution {
             curr.next = prev;
             prev = curr;
             curr = ahead;
-            if (curr == null) break;
+            if (curr == null) {
+                break;
+            }
             ahead = ahead.next;
-        } 
+        }
 
         return prev;
     }
 
-    void merge(ListNode l1, ListNode l2) {
-      while (l1 != null) {
-        ListNode n1 = l1.next, n2 = l2.next;
-        l1.next = l2;
-        
-        if (n1 == null)
-          break;
-            
-        l2.next = n1;
-        l1 = n1;
-        l2 = n2;
-      }
+    public void merge(ListNode l1, ListNode l2) {
+        ListNode dummyHead = new ListNode(-1);
+        ListNode temp = dummyHead;
+        while (l1 != null && l2 != null) {
+            temp.next = l1;
+            l1 = l1.next;
+            temp = temp.next;
+
+            temp.next = l2;
+            l2 = l2.next;
+            temp = temp.next;
+        }
+
+        if (l1 != null) {
+            temp.next = l1;
+        }
+        if (l2 != null) {
+            temp.next = l2;
+        }
+
+        dummyHead =  dummyHead.next;
     }
 }
