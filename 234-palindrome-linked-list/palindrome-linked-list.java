@@ -10,37 +10,41 @@
  */
 class Solution {
     public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
 
-        if (head == null || head.next == null) return true;
+        ListNode firstHalf = head;
+        ListNode secondHalf = head;
 
-        ListNode prev = null; // always before slow ptr;
         ListNode slow = head;
-        ListNode fast = head;
+        ListNode fast = head.next;
 
         while (fast != null && fast.next != null) {
-            prev = slow;
             slow = slow.next;
             fast = fast.next.next;
         }
-        prev.next = null;
 
-        ListNode firstHalf = head;
-        ListNode secondHalf = reverseLinkedList(slow);
+        secondHalf = slow.next;
+        slow.next = null;
 
+        ListNode reverseSecond = reverseLinkedList(secondHalf);
 
-        ListNode firstPtr = firstHalf;
-        ListNode secondPtr = secondHalf;
+        ListNode temp1 = firstHalf;
+        ListNode temp2 = reverseSecond;
 
-        while (firstPtr != null) {
-            if (firstPtr.val != secondPtr.val) return false;
-            firstPtr = firstPtr.next;
-            secondPtr = secondPtr.next;
+        while (temp1 != null && temp2 != null) {
+            if (temp1.val != temp2.val) {
+                return false;
+            }
+            temp1 = temp1.next;
+            temp2 = temp2.next;
         }
 
         return true;
     }
 
-    public ListNode reverseLinkedList(ListNode head) {
+    private ListNode reverseLinkedList(ListNode head) {
         ListNode prev = null;
         ListNode curr = head;
         ListNode ahead = head.next;
@@ -49,7 +53,9 @@ class Solution {
             curr.next = prev;
             prev = curr;
             curr = ahead;
-            if (curr == null) break;
+            if (curr == null) {
+                break;
+            }
             ahead = ahead.next;
         }
 
