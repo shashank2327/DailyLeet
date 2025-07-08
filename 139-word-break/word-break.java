@@ -1,28 +1,28 @@
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
-        Set<String> wordSet = new HashSet<>(wordDict);
+        Set<String> set = new HashSet<>(wordDict);
         Map<Integer, Boolean> memo = new HashMap<>();
-        return dfs(s, 0, wordSet, memo);
+        return solve(s, 0, set, memo);
     }
 
-    private boolean dfs(String s, int start, Set<String> wordSet, Map<Integer, Boolean> memo) {
-        // base case;
-        // traversed the whole string;
-        if (start == s.length()) {
+    public boolean solve(String s, int idx, Set<String> set, Map<Integer, Boolean> memo) {
+        if (idx == s.length()) {
             return true;
         }
 
-        if (memo.containsKey(start)) return memo.get(start);
+        if (memo.containsKey(idx)) {
+            return memo.get(idx);
+        }
 
-        for (int end = start + 1; end <= s.length(); end++) {
-            String prefix = s.substring(start, end);
-            if (wordSet.contains(prefix) && dfs(s, end, wordSet, memo)) {
-                memo.put(start, true);
+        for (int i = idx; i < s.length(); i++) {
+            String sub = s.substring(idx, i + 1);
+            if (set.contains(sub) && solve(s, i + 1, set, memo)) {
+                memo.put(idx, true);
                 return true;
             }
         }
 
-        memo.put(start, false);
+        memo.put(idx, false);
         return false;
     }
 }
