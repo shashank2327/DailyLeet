@@ -1,12 +1,14 @@
 class DisjointSet {
     List<Integer> parent = new ArrayList<>();
     List<Integer> size = new ArrayList<>();
+    int components;
 
     public DisjointSet(int n) {
         for (int i = 0; i <= n; i++) {
             parent.add(i);
             size.add(i);
         }
+        components = n;
     } 
 
     public int findUPar(int node) {
@@ -33,6 +35,7 @@ class DisjointSet {
             parent.set(ulp_v, ulp_u);
             size.set(ulp_u, size.get(ulp_v) + size.get(ulp_u));
         }
+        components--;
     }
 }
 class Solution {
@@ -58,12 +61,7 @@ class Solution {
                 }
             }
 
-            Set<Integer> set = new HashSet<>();
-            for (int i = 0; i < n; i++) {
-                set.add(ds.findUPar(i));
-            }
-
-            if (set.size() >= k) {
+            if (ds.components >= k) {
                 result = mid;
                 hi = mid - 1;
             } else {
