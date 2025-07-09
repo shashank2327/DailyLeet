@@ -39,7 +39,10 @@ class Solution {
     public int minTime(int n, int[][] edges, int k) {
         int m = edges.length;
         int lo = 0;
-        int hi = (int) 1e9;
+        int hi = 0;
+        for (int[] edge : edges) {
+            hi = Math.max(hi, edge[2]);
+        }
         int result = -1;
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
