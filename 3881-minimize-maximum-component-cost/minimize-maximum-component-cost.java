@@ -44,7 +44,6 @@ class Solution {
         int hi = (int)1e6;
 
         int result = -1;
-        Arrays.sort(edges, (a, b) -> a[0] - b[0]);
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
             if (check(edges, k, n, mid)) {
