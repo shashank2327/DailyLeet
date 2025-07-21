@@ -13,11 +13,14 @@ class Solution {
 
         // first loop for bull Count
         for (int i = 0; i < len; i++) {
-            if (secret.charAt(i) == guess.charAt(i) && secretMap.containsKey(secret.charAt(i))) {
+            char reqChar = secret.charAt(i);
+            char presChar = guess.charAt(i);
+
+            if (reqChar == presChar && secretMap.containsKey(presChar)) {
                 bullCount++;
-                secretMap.put(secret.charAt(i), secretMap.get(secret.charAt(i)) - 1);
-                if (secretMap.get(secret.charAt(i)) == 0) {
-                    secretMap.remove(secret.charAt(i));
+                secretMap.put(presChar, secretMap.get(presChar) - 1);
+                if (secretMap.get(presChar) == 0) {
+                    secretMap.remove(presChar);
                 }
             }
         }
