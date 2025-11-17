@@ -28,11 +28,12 @@ class Solution {
         if (s.charAt(i) == t.charAt(j)) {
             // take;
             result += solve(s, t, i + 1, j + 1, memo);
-            // not take;
-            result += solve(s, t, i + 1, j, memo);
-        } else {
-            result += solve(s, t, i + 1, j, memo);
+        //     // not take;
+        //     result += solve(s, t, i + 1, j, memo);
+        // } else {
+            
         }
+        result += solve(s, t, i + 1, j, memo);
 
         return memo[i][j] = result;
     }
