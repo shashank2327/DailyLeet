@@ -1,10 +1,17 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        int res = 0;
-        for (auto num : nums) {
-            res = res ^ num;
+        int result = 0;
+
+        for (int num : nums) {
+            result = result ^ num;
         }
-        return res;
+
+        return result;
     }
 };
+
+/*
+    a ^ a = 0;
+    and taking xor with 0 have no effect.
+*/
