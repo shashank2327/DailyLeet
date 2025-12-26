@@ -1,39 +1,38 @@
 class Solution {
     public int bestClosingTime(String customers) {
-        // brute force ->
-        // Run two loops, calculate penalty for each hour, return the min.
-        // TLE , Since n = 1e5;
-
         int n = customers.length();
-        int yesCt = 0;
-        for (char ch : customers.toCharArray()) {
-            if (ch == 'Y') yesCt++;
-        }
-        int nCt = 0;
-        
-        int min = Integer.MAX_VALUE;
-        int ind = -1;
-        for (int i = 0; i < n; i++) {
-            int penalty = 0;
-            if (customers.charAt(i) == 'Y') {
-                penalty += yesCt + nCt;
-                yesCt--;
-            } else if (customers.charAt(i) == 'N') {
-                penalty += yesCt + nCt;
-                nCt++;
-            }
 
+        int yesCnt = 0;
+        int noCnt = 0;
+
+        for (char ch : customers.toCharArray()) {
+            if (ch == 'Y') yesCnt++;
+        }
+
+        int min = Integer.MAX_VALUE;
+        int idx = -1;
+
+        for (int i = 0; i < n; i++) {
+            char token = customers.charAt(i);
+            int penalty = 0;
+
+            if (token == 'Y') {
+                penalty += yesCnt + noCnt;
+                yesCnt--;
+            } else {
+                penalty += yesCnt + noCnt;
+                noCnt++;
+            }
 
             if (penalty < min) {
                 min = penalty;
-                ind = i;
+                idx = i;
             }
         }
 
-        if (nCt < min) {
-            ind = n;
-        }
+        if (noCnt < min) idx = n;
 
-        return ind;
+        return idx;
+
     }
 }
