@@ -9,19 +9,20 @@ class Tuple {
         this.col = col;
     }
 }
+
 class Solution {
     public int shortestPathBinaryMatrix(int[][] grid) {
         int n = grid.length;
-
+        
         if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
-        if (n == 1) return 1;
 
-        Queue<Tuple> q = new LinkedList<>();
+        Queue<Tuple> q= new LinkedList<>();
         q.offer(new Tuple(1, 0, 0));
-        grid[0][0] = 1;
+        grid[0][0] = 1; // visited
 
         while (!q.isEmpty()) {
             int sz = q.size();
+
             while (sz-- > 0) {
                 Tuple token = q.poll();
                 int d = token.dis;
