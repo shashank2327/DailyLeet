@@ -1,39 +1,49 @@
 class Solution {
-    public int strStr(String aStr, String bStr) {
-        int[] lps = prefixSuffix(bStr.toCharArray());
+    public int strStr(String haystack, String needle) {
+        int n = haystack.length();
+        int m = needle.length();
+
+        int[] lps = computeLPS(needle);
 
         int i = 0;
         int j = 0;
-        char[] a = aStr.toCharArray();
-        char[] b = bStr.toCharArray();
-        while (i < a.length && j < b.length) {
-            if (a[i] == b[j]) {
+
+        while (i < n && j < m) {
+            if (haystack.charAt(i) == needle.charAt(j)) {
                 i++;
                 j++;
             } else {
-                if (j != 0) {
-                    j = lps[j - 1];
-                } else {
+                if (j == 0) {
                     i++;
+                } else {
+                    j = lps[j - 1];
                 }
             }
         }
-        if (j != b.length) return -1;
-        return i - j;
+
+        if (j != m) {
+            return -1;
+        } else {
+            return i - j;
+        }
     }
 
-    private int[] prefixSuffix(char[] pattern) {
-        int[] lps = new int[pattern.length];
-        int index = 0;
+    private int[] computeLPS(String pattern) {
+        int M = pattern.length();
+        int[] lps = new int[M];
 
-        for (int i = 1; i < pattern.length;) {
-            if (pattern[i] == pattern[index]) {
-                lps[i] = index + 1;
-                index++;
+        int len = 0;
+        lps[0] = 0;
+
+        int i = 1;
+        while (i < M) {
+            if (pattern.charAt(i) == pattern.charAt(len)) {
+                len++;
+                lps[i] = len;
                 i++;
             } else {
-                if (index != 0) {
-                    index = lps[index - 1];
+                if (len != 0) {
+                    len = lps[len - 1];
                 } else {
                     lps[i] = 0;
                     i++;
@@ -42,5 +52,6 @@ class Solution {
         }
 
         return lps;
+
     }
 }
