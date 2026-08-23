@@ -1,75 +1,40 @@
-class DisjointSet {
-
-    List<Integer> parent = new ArrayList<>();
-    List<Integer> size = new ArrayList<>();
-
-    public DisjointSet(int n) {
-        for (int i = 0; i <= n; i++) {
-            parent.add(i);
-            size.add(1);
-        }
-    }
-
-    public int findUPar(int node) {
-        if (node == parent.get(node)) {
-            return node;
-        }
-        int ulp = findUPar(parent.get(node));
-        parent.set(node, ulp);
-        return parent.get(node);
-    }
-
-    public void unionBySize(int u, int v) {
-        int ulp_u = findUPar(u);
-        int ulp_v = findUPar(v);
-
-        if (ulp_u == ulp_v) {
-            return;
-        }
-
-        if (size.get(ulp_u) < size.get(ulp_v)) {
-            parent.set(ulp_u, ulp_v);
-            size.set(ulp_v, size.get(ulp_u) + size.get(ulp_v));
-        } else {
-            parent.set(ulp_v, ulp_u);
-            size.set(ulp_u, size.get(ulp_u) + size.get(ulp_v));
-        }
-    }
-}
-
 class Solution {
     public int makeConnected(int n, int[][] connections) {
-        int edges = connections.length;
-        if (edges < n - 1) return -1;
+        if (connections.length < n - 1) return -1;
 
-        DisjointSet ds = new DisjointSet(n);
-        int extra = 0;
-        for (int[] cable : connections) {
-            int comp1 = cable[0];
-            int comp2 = cable[1];
+        List<List<Integer>> adj = new ArrayList<>();
 
-            if (ds.findUPar(comp1) == ds.findUPar(comp2)) {
-                extra++;
-            } else {
-                ds.unionBySize(comp1, comp2);
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int[] connection: connections) {
+            int u = connection[0];
+            int v = connection[1];
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        int[] vis = new int[n];
+        int cnt = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (vis[i] == 0) {
+                cnt++;
+                dfs(adj, vis, i);
             }
         }
 
-        int disconnected = 0;
+        return cnt - 1;
+    }
 
-        for (int i = 0; i < n; i++) {
-            if (ds.parent.get(i) == i) disconnected++;
-        }
+    public void dfs(List<List<Integer>> adj, int[] vis,  int nd) {
+        vis[nd] = 1;
 
-        int req = disconnected - 1;
-
-        if (extra >= req) {
-            return req;
-        } else {
-            return -1;
+        for (int nbr: adj.get(nd)) {
+            if (vis[nbr] == 0) {
+                dfs(adj, vis, nbr);
+            }
         }
     }
 }
-
-
-// for -1 -> if number of comp is n, then minimum n - 1 edges should be there;
