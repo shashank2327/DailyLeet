@@ -3,37 +3,28 @@
 
 public class Solution extends Relation {
     public int findCelebrity(int n) {
-        int cnt = 0;
+
         int res = -1;
-
-        for (int i = 0; i < n; i++) {
-            int fans = 0;
-            for (int j = 0; j < n; j++) {
-                if (knows(j, i)) {
-                    fans++;
-                }
-
-                if (i != j && knows(i, j)) {
-                    fans--;
-                }
-            }
-
-            if (fans == n) {
-                cnt++;
+        int u = 0;
+        
+        for (int i = 1; i < n; i++) {
+            if (knows(u, i)) {
                 res = i;
+                u = i;
+            } else {
+                res = u;
             }
         }
 
-        if (cnt == 1) {
-            return res;
-        } else {
-            return -1;
+        if (res == -1) return res;
+
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (knows(i, res)) cnt++;
+
+            if (i != res && knows(res, i)) cnt--;
         }
+
+        return cnt == n ? res : -1;
     }
 }
-
-/*
-    the brute force approach is to,
-
-    for every node, check whether every other node knows it or not;
-*/
