@@ -6,7 +6,7 @@ class Solution {
 
         for (String s: strs) {
             String sorted = sortString(s);
-            System.out.println(sorted);
+            // System.out.println(sorted);
             map.putIfAbsent(sorted, new ArrayList<>());
             map.get(sorted).add(s);
         }
@@ -19,12 +19,20 @@ class Solution {
     }
 
     private String sortString(String s) {
-        char[] a = s.toCharArray();
-        Arrays.sort(a);
+        int[] freq = new int[26];
+
+        for (int i = 0; i < s.length(); i++) {
+            freq[s.charAt(i) - 'a']++;
+        }
+
         StringBuilder sb = new StringBuilder();
 
-        for (char ch: a) {
-            sb.append(ch);
+        for (int i = 0; i < 26; i++) {
+            while (freq[i] > 0) {
+                char ch = (char) (i + 'a');
+                sb.append(ch);
+                freq[i]--;
+            }
         }
 
         return sb.toString();
