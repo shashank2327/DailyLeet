@@ -2,25 +2,38 @@ class Solution {
     public int leastInterval(char[] tasks, int n) {
 
         int[] freq = new int[26];
-
-        for (char task : tasks) {
+        for(char task: tasks) {
             freq[task - 'A']++;
         }
 
-        int maxFreq = 0;
-        int countMaxFreq = 0;
-
-        for (int f : freq) {
-            if (f > maxFreq) {
-                maxFreq = f;
-                countMaxFreq = 1;
-            } else if (f == maxFreq) {
-                countMaxFreq++;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        for (int num: freq) {
+            if (num > 0) {
+                pq.offer(num);
             }
         }
 
-        int result = (maxFreq - 1) * (n + 1) + countMaxFreq;
+        // keep track of cooldown tasks;
+        Queue<int[]> q = new LinkedList<>(); // (cnt, time when task can be readded)
 
-        return Math.max(result, tasks.length);
+        int time = 0;
+        while (!pq.isEmpty() || !q.isEmpty()) {
+            time++;
+
+            if (!pq.isEmpty()) {
+                int curr = pq.poll() - 1;
+                if (curr > 0) {
+                    q.offer(new int[]{curr, time + n});
+                }
+            }
+
+            if (!q.isEmpty()) {
+                if (q.peek()[1] == time) {
+                    pq.offer(q.poll()[0]);
+                }
+            }
+        }
+
+        return time;
     }
 }
