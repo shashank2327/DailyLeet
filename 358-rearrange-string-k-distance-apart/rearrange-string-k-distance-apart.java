@@ -1,5 +1,7 @@
 class Solution {
     public String rearrangeString(String s, int k) {
+        if (k > 26) return "";
+        
         int[][] freq = new int[26][2];
         int uniqueCnt = 0;
 
