@@ -1,23 +1,34 @@
 class Solution {
-    
-    public int change(int x, int[] coins) {
+    public int change(int amount, int[] coins) {
         int n = coins.length;
-        int[] nextState = new int[x + 1];
-        nextState[0] = 1;
+        Arrays.sort(coins);
+        int[][] dp = new int[n + 1][amount + 1];
 
-        for (int i = n - 1; i >= 0; i--) {
-            int[] currentState = new int[x + 1];
-            currentState[0] = 1;
-            for (int j = 1; j <= x; j++) {
-                int skip = nextState[j];
-                int pick = 0;
-                if (coins[i] <= j) {
-                    pick = currentState[j - coins[i]];
-                }
-                currentState[j] = (skip + pick);
-            }
-            nextState = currentState;
+
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 1;
         }
-        return nextState[x];
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= amount; j++) {
+                int notTake = dp[i - 1][j];
+
+                int take = 0;
+                if (coins[i - 1] <= j) {
+                    take = dp[i][j - coins[i - 1]];
+                }
+
+                dp[i][j] = take + notTake;
+            }
+        }
+
+        return dp[n][amount];
     }
 }
+
+/*
+    Base case:
+
+    1. if the amount is 0, number of ways = 1;
+    2. if the amount is x, there is no coins , number of ways = 0
+*/
