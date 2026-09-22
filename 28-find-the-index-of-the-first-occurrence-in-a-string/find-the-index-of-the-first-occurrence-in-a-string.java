@@ -13,45 +13,45 @@ class Solution {
                 i++;
                 j++;
             } else {
-                if (j == 0) {
-                    i++;
-                } else {
+                if (j > 0) {
                     j = lps[j - 1];
+                } else {
+                    i++;
                 }
             }
         }
 
-        if (j != m) {
-            return -1;
-        } else {
+        if (j == m) {
             return i - j;
+        } else {
+            return -1;
         }
     }
 
     private int[] computeLPS(String pattern) {
-        int M = pattern.length();
-        int[] lps = new int[M];
+        int m = pattern.length();
+        int[] lps = new int[m];
 
         int len = 0;
         lps[0] = 0;
 
-        int i = 1;
-        while (i < M) {
+
+        int i = 1; 
+
+        while (i < m) {
             if (pattern.charAt(i) == pattern.charAt(len)) {
                 len++;
                 lps[i] = len;
                 i++;
             } else {
-                if (len != 0) {
+                if (len > 0) {
                     len = lps[len - 1];
                 } else {
-                    lps[i] = 0;
                     i++;
                 }
             }
         }
 
         return lps;
-
     }
 }
