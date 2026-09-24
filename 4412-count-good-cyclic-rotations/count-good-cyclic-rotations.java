@@ -22,7 +22,7 @@ class Solution {
             f_half += (nums[ptr2] - nums[ptr1]);
             s_half += (nums[ptr1] - nums[ptr2]);
 
-            System.out.println(f_half + " " + s_half);
+            // System.out.println(f_half + " " + s_half);
 
             if (f_half > s_half) {
                 cnt++;
