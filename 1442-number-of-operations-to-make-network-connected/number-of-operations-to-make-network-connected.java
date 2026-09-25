@@ -1,40 +1,68 @@
-class Solution {
-    public int makeConnected(int n, int[][] connections) {
-        if (connections.length < n - 1) return -1;
+class DisjointSet {
+    List<Integer> size = new ArrayList<>();
+    List<Integer> parent = new ArrayList<>();
 
-        List<List<Integer>> adj = new ArrayList<>();
-
+    public DisjointSet(int n) {
         for (int i = 0; i < n; i++) {
-            adj.add(new ArrayList<>());
+            size.add(1);
+            parent.add(i);
+        }
+    }
+
+    public int findUPar(int n) {
+        if (parent.get(n) == n) {
+            return n;
         }
 
+        int ulp = findUPar(parent.get(n));
+        parent.set(n, ulp);
+        return ulp;
+    }
+
+    public void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+
+        if (ulp_u == ulp_v) return;
+
+        if (size.get(ulp_u) < size.get(ulp_v)) {
+            parent.set(ulp_u, ulp_v);
+            size.set(ulp_v, size.get(ulp_u) + size.get(ulp_v));
+        } else {
+            parent.set(ulp_v, ulp_u);
+            size.set(ulp_u, size.get(ulp_u) + size.get(ulp_v));
+        }
+    }
+}
+
+class Solution {
+    public int makeConnected(int n, int[][] connections) {
+        DisjointSet ds = new DisjointSet(n);
+
+        int extra = 0;
         for (int[] connection: connections) {
             int u = connection[0];
             int v = connection[1];
-            adj.get(u).add(v);
-            adj.get(v).add(u);
+
+            if (ds.findUPar(u) != ds.findUPar(v)) {
+                ds.unionBySize(u, v);
+            } else {
+                extra++;
+            }
         }
 
-        int[] vis = new int[n];
-        int cnt = 0;
+        int disconnectComponent = 0;
 
         for (int i = 0; i < n; i++) {
-            if (vis[i] == 0) {
-                cnt++;
-                dfs(adj, vis, i);
-            }
+            if (ds.findUPar(i) == i) disconnectComponent++;
         }
 
-        return cnt - 1;
-    }
+        int req = disconnectComponent - 1;
 
-    public void dfs(List<List<Integer>> adj, int[] vis,  int nd) {
-        vis[nd] = 1;
-
-        for (int nbr: adj.get(nd)) {
-            if (vis[nbr] == 0) {
-                dfs(adj, vis, nbr);
-            }
+        if (extra >= req) {
+            return req;
+        } else {
+            return -1;
         }
     }
 }
