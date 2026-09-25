@@ -1,51 +1,24 @@
-public class DisjointSet {
-
-    List<Integer> rank = new ArrayList<>();
-    List<Integer> parent = new ArrayList<>();
+class DisjointSet {
     List<Integer> size = new ArrayList<>();
+    List<Integer> parent = new ArrayList<>();
 
-
-    // Constructor (Taking number of nodes);
     public DisjointSet(int n) {
-        for (int i = 0; i <= n; i++) {
-            rank.add(0);
-            parent.add(i);
+        for (int i = 0; i < n; i++) {
             size.add(1);
+            parent.add(i);
         }
     }
 
-
-    // Path compression
-    public int findUPar(int node) {
-        if (node == parent.get(node)) {
-            return node;
+    public int findUPar(int n) {
+        if (parent.get(n) == n) {
+            return n;
         }
-        int ulp = findUPar(parent.get(node));
-        parent.set(node, ulp);
-        return parent.get(node);
+
+        int ulp = findUPar(parent.get(n));
+        parent.set(n, ulp);
+        return ulp;
     }
 
-
-    // Finding union using rank;
-    public void unionByRank(int u, int v) {
-        int ulp_u = findUPar(u);
-        int ulp_v = findUPar(v);
-
-        if (ulp_u == ulp_v) return;
-
-        if (rank.get(ulp_u) < rank.get(ulp_v)) {
-            parent.set(ulp_u, ulp_v);
-        } else if (rank.get(ulp_u) > rank.get(ulp_v)) {
-            parent.set(ulp_v, ulp_u);
-        } else {
-            parent.set(ulp_v, ulp_u);
-            int rankU = rank.get(ulp_u);
-            rank.set(ulp_u, rankU + 1);
-        }
-    }
-
-
-    // Finding union using size;
     public void unionBySize(int u, int v) {
         int ulp_u = findUPar(u);
         int ulp_v = findUPar(v);
@@ -62,35 +35,30 @@ public class DisjointSet {
     }
 }
 
-/* ------------------------------------------------------------------------------------- */
-
-
 class Solution {
     public int removeStones(int[][] stones) {
         int n = stones.length;
 
         List<int[]> edges = new ArrayList<>();
+
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 if (stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) {
-                    edges.add(new int[] {i, j});
+                    edges.add(new int[]{i, j});
                 }
             }
         }
 
-        int m = edges.size();
+        DisjointSet ds = new DisjointSet(n);
 
-        DisjointSet ds = new DisjointSet(n - 1);
-
-        for (int i = 0; i < m; i++) {
-            int[] edge = edges.get(i);
+        for (int[] edge: edges) {
             int u = edge[0];
             int v = edge[1];
+
             if (ds.findUPar(u) != ds.findUPar(v)) {
                 ds.unionBySize(u, v);
             }
         }
-
 
         Set<Integer> set = new HashSet<>();
         int ans = 0;
@@ -98,10 +66,9 @@ class Solution {
             if (set.contains(ds.findUPar(i))) {
                 ans++;
             } else {
-                set.add(ds.findUPar(i));
+                set.add((ds.findUPar(i)));
             }
         }
-
 
         return ans;
     }
