@@ -1,5 +1,5 @@
 /* Write your T-SQL query statement below */
-SELECT
+SELECT 
     emu.unique_id,
     em.name
 FROM Employees as em
