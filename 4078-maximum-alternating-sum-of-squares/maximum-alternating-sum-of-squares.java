@@ -16,7 +16,6 @@ class Solution {
             result += (nums[i] * nums[i]);
         }
 
-
         return result;
     }
 }
