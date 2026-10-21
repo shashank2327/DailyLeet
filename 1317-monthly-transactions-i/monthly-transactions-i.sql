@@ -1,18 +1,20 @@
 /* Write your T-SQL query statement below */
+
 SELECT
-    LEFT(trans_date, 7) as month,
-    country,
+    t.month as month,
+    t.country as country,
     COUNT(*) as trans_count,
-    SUM(
-        CASE 
-            WHEN state = 'approved' THEN 1 
-            ELSE 0 
-        END) as approved_count,
+    SUM(success) as approved_count,
     SUM(amount) as trans_total_amount,
-    SUM(
+    SUM(amount * success) as approved_total_amount
+FROM 
+    (SELECT
+        *,
+        LEFT(trans_date, 7) as month,
         CASE
-            WHEN state = 'approved' THEN amount
+            WHEN state = 'approved' THEN 1
             ELSE 0
-        END) as approved_total_amount
-FROM Transactions
-GROUP BY LEFT(trans_date, 7), country
+        END as success
+    FROM Transactions) as t
+GROUP BY t.month, t.country
+order by t.country desc
